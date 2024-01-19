@@ -9,18 +9,20 @@ const options = {
       Authorization: `Bearer ${secret}`
     }
 };
-
-const searchField = $('#inputName');
   
 // search keyword
 let keyword = 'breaking bad';
 
+// search by title api
 async function searchTyping(keyword) {
     try {
         const res = await fetch(`https://api.themoviedb.org/3/search/keyword?query=${keyword}&page=1`, options);
         if (res.status === 200) {
             data = await res.json();
-            console.log(data.results[0].id);
+            $(data.results).each((i, o) => {
+                console.log(o.name);
+                $('#suggested').append($('<li>').addClass('list-group-item').attr('movie-name', o.name).text(o.name));
+            });
         } else {
             console.log(`Error ${res.status}`);
         }
@@ -29,4 +31,9 @@ async function searchTyping(keyword) {
     }
 };
 
-searchTyping(keyword);
+// search movie by typing
+$('#inputName').keyup(function(){
+    const searchField = $('#inputName').val().trim();
+    $('#suggested').empty();
+    searchTyping(searchField);
+});
