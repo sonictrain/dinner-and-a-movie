@@ -6,15 +6,35 @@ console.log("test");
 
 const queryURL = recipeRoot + "tea" + "&app_id=" + APIid + "&app_key=" + APIKey + "&type=public";
 
-fetch(queryURL)
-.then (function(response) {
+
+
+function foodClick() {
+    fetch(queryURL)
+    .then (function(response) {
     return response.json();
-})
-.then(function(data) {
-    console.log(data);
+    })
+    .then(function(data) {
+        console.log(data);
 
-    const results = data.data;
+        const results = data;
 
-    console.log(results)
+        console.log(results.hits[1]);
 
-})
+        const foodName = results.hits[1].recipe.label;
+        const foodImage = results.hits[1].recipe.images.THUMBNAIL.url;
+
+        console.log(foodName, foodImage);
+
+//    const p = $("<p>");
+//    p.text(foodName);
+
+        })
+    }
+
+
+$("#button").on("click", function(event) {
+    event.preventDefault();
+
+    foodClick();
+
+});
