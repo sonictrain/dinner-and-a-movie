@@ -9,8 +9,8 @@
 }
 
 @font-face {
-    font-family: JosefinSlab-Variable_wght;
-    src: url("../Fonts/JosefinSlab-VariableFont_wght.ttf");
+    font-family: CorleoneDue;
+    src: url("../Fonts/CorleoneDue.ttf");
 }
 
 /* header */
@@ -28,20 +28,21 @@
 }
 
 h1 {
-    color: rgb(248, 234, 153);
-    font-family: Futura-Book-Font;
-    font-size: 800px;
-    font-weight: 600px;
+    color: #ffc000;
+    font-family: CorleoneDue;
+    font-size: 900px;
+    font-weight: 500;
+    text-shadow: -2px -2px 0 #000, 2px -2px 0 #000, -2px 2px 0 #000, 2px 2px 0 #000;
 }
 
 #hero-text {
     color: #ffc000;
     font-family: Pacifico-Regular;
-    font-size: 30px;
+    font-size: 25px;
 }
 
 .form-select {
-    margin: 10px;
+    margin: 20px;
     padding: 5px;
 }
 
