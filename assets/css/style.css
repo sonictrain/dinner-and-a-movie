@@ -1,0 +1,52 @@
+@font-face {
+    font-family: Pacifico-Regular;
+    src: url("../Fonts/Pacifico-Regular.ttf");
+}
+
+@font-face {
+    font-family: Futura-Book-Font;
+    src: url("../Fonts/Futura-Book-Font.ttf");
+}
+
+@font-face {
+    font-family: CorleoneDue;
+    src: url("../Fonts/CorleoneDue.ttf");
+}
+
+/* header */
+.jumbotron {
+    text-align: center;
+    background-image: url("../images/dinner&movie-hero.png");
+    background-size: cover;
+    background-repeat: no-repeat;
+    color: black;
+    border-radius: 0;
+    height: 300px;
+    padding: 80px;
+    width: 100%;
+    object-fit: contain;
+}
+
+h1 {
+    color: #ffc000;
+    font-family: CorleoneDue;
+    font-size: 900px;
+    font-weight: 500;
+    text-shadow: -2px -2px 0 #000, 2px -2px 0 #000, -2px 2px 0 #000, 2px 2px 0 #000;
+}
+
+#hero-text {
+    color: #ffc000;
+    font-family: Pacifico-Regular;
+    font-size: 25px;
+}
+
+.form-label {
+    margin: 20px;
+    padding: 5px;
+}
+
+/* body */
+body {
+    background-color: #610304;
+}
