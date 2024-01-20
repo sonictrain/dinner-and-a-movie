@@ -42,11 +42,11 @@ const createCard = (movies) => {
     // $('#search-term').val('');
     // get fetched data for each movie, create a card, add to search results
     $.each(movies, (i, movie) => {
-        let poster = getImage(movie);
-        console.log(poster);
-        let title = $('<h5>').text(movie.title).addClass('card-title');
-        let releaseDate = $('<p>').text(movie.release_date);
-        let rating = $('<p>').text(movie.vote_average.toFixed(1));
+        const poster = getImage(movie);
+        const title = $('<h5>').text(movie.title).addClass('card-title');
+        const year = getReleaseYear(movie.release_date);
+        const releaseDate = $('<p>').text(`Release year: ${year}`);
+        const rating = $('<p>').text(movie.vote_average.toFixed(1));
         // collapsable button for description
         const desBtn = $('<button>')
             .addClass('btn btn-outline-secondary btn-sm mx-1 mb-2')
@@ -56,15 +56,17 @@ const createCard = (movies) => {
             .attr('aria-expanded', 'false')
             .attr('aria-controls', 'collapseDesc')
             .text('Description');
-        let description = $('<p>').html(movie.overview).addClass('desc');
-        console.log(movie.overview);
+        // create an html element <p> with the description text
+        const description = $('<p>').html(movie.overview).addClass('desc');
+        // create the inner div for the collapsable button with the description
         const descInnerCard = $('<div>').addClass('card card-body').append(description);
+        // create the lower div for description and attach the inner div
         const descDiv = $('<div>').addClass('collapse').attr('id', 'collapseDesc');
         descDiv.append(descInnerCard);
         const cardBody = $('<div>').addClass('card-body').append(title, releaseDate, rating, desBtn);
         const newCard = $('<div>').addClass('card').css({width: '15rem', height: 'auto'});
         newCard.append(poster, cardBody);
-        $('#movie-search').prepend(newCard);
+        $('#movie-search').append(newCard);
     })
 }
 
@@ -82,6 +84,8 @@ function getImage(item) {
     return image;
 }
 
-        // const movieCard = ('<div>').addClass('card').append(imgEl, title, releaseDate, description);
-        // $('.movies').append(movieCard);
-   
+function getReleaseYear(date) {
+    const dateArr = date.split('-');
+    const yearOnly = dateArr[0];
+    return yearOnly;
+}
