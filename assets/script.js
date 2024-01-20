@@ -4,13 +4,19 @@ const APIKey = "027bd5bbabe6fabd88736c41b30ffe19";
 
 console.log("test");
 
-const queryURL = recipeRoot + "tea" + "&app_id=" + APIid + "&app_key=" + APIKey + "&type=public";
+const input = $("#input").val().trim();
+console.log(input);
 
+//const queryURL = recipeRoot + input + "&app_id=" + APIid + "&app_key=" + APIKey + "&type=public";
 
-//    const p = $("<p>");
-//    p.text(foodName);
+$("#button").on("click", function() {
 
-function foodClick() {
+//    function foodClick() {
+    const input = $("#input").val().trim();
+    console.log(input)
+
+    const queryURL = recipeRoot + input + "&app_id=" + APIid + "&app_key=" + APIKey + "&type=public";
+
     fetch(queryURL)
     .then (function(response) {
     return response.json();
@@ -31,15 +37,21 @@ function foodClick() {
             const image = $("<img>").attr("src", foodImage);
 
             $("#emptySpace").prepend(image, name);
-            
-        })
-    }
 
-window.onload = function() {
-    document.getElementById("button").onclick = function run() {
-    foodClick();
-    };
-}
+        })
+    })
+
+
+//window.onload = function() {
+//    console.log(input);
+    
+//    document.getElementById("button").onclick = function run() {
+//    foodClick();
+    
+
+
+//    };
+//}
 
 
 
@@ -48,3 +60,6 @@ window.onload = function() {
 //$("#button").on("click", function(event) {
 //    event.preventDefault();
 //});
+
+//    const p = $("<p>");
+//    p.text(foodName);
