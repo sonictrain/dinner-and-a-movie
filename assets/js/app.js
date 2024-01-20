@@ -19,6 +19,7 @@ async function getMovies(keyword) {
     try {
         const results = await axios.get(searchUrl, options);
         const movies = results.data.results;
+        console.log(movies);
         createCard(movies);
     } catch(err) {
         console.log("Error with MOVIE search", err);
@@ -37,9 +38,13 @@ const createCard = (movies) => {
         const title = $('<h5>').text(movie.title).addClass('card-title');
         const year = getReleaseYear(movie.release_date);
         const releaseDate = $('<p>').text(`Release year: ${year}`);
-        const rating = $('<p>').text(movie.vote_average.toFixed(1));
+        if (!movie.vote_average == 0) {
+            rating = $('<p>').text(`Rating: ${movie.vote_average.toFixed(1)}`);
+        } else {
+            rating = $('<p>').text('N/A');
+        };
         const desBtn = $('<button>')
-            .addClass('btn btn-outline-secondary btn-sm mx-1 mb-2')
+            .addClass('btn btn-outline-secondary mx-1 mb-2')
             .attr('type', 'button')
             .attr('data-bs-toggle', 'collapse')
             .attr('data-bs-target', '#collapseDesc')
@@ -47,7 +52,11 @@ const createCard = (movies) => {
             .attr('aria-controls', 'collapseDesc')
             .text('Description');
         // create an html element <p> with the description text
-        const description = $('<p>').text(movie.overview).addClass('desc');
+        if (!movie.overview == '') {
+            description = $('<p>').text(movie.overview).addClass('desc')
+        } else {
+            description = $('<p>').text("Description not found.").addClass('desc')
+        }
         // create the inner div for the collapsable button with the description
         const descInnerCard = $('<div>').addClass('card card-body').append(description);
         // create the lower div for description and attach the inner div
