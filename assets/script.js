@@ -10,11 +10,6 @@ const queryURL = recipeRoot + "tea" + "&app_id=" + APIid + "&app_key=" + APIKey 
 //    const p = $("<p>");
 //    p.text(foodName);
 
-
-//$("#button").on("click", function(event) {
-//    event.preventDefault();
-//});
-
 function foodClick() {
     fetch(queryURL)
     .then (function(response) {
@@ -32,8 +27,11 @@ function foodClick() {
 
         console.log(foodName, foodImage);
 
-        
+            const name = $("<p>").text(foodName);
+            const image = $("<img>").attr("src", foodImage);
 
+            $("#emptySpace").prepend(image, name);
+            
         })
     }
 
@@ -42,3 +40,11 @@ window.onload = function() {
     foodClick();
     };
 }
+
+
+
+
+
+//$("#button").on("click", function(event) {
+//    event.preventDefault();
+//});
