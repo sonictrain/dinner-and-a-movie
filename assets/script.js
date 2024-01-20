@@ -9,37 +9,69 @@ console.log(input);
 
 //const queryURL = recipeRoot + input + "&app_id=" + APIid + "&app_key=" + APIKey + "&type=public";
 
-$("#button").on("click", function() {
-
+$("#button").on("click", function(event) {
+    event.preventDefault;
 //    function foodClick() {
     const input = $("#input").val().trim();
     console.log(input)
 
     const queryURL = recipeRoot + input + "&app_id=" + APIid + "&app_key=" + APIKey + "&type=public";
+    const emptyURL = recipeRoot + "food" + "&app_id=" + APIid + "&app_key=" + APIKey + "&type=public";
 
-    fetch(queryURL)
-    .then (function(response) {
-    return response.json();
-    })
-    .then(function(data) {
-        console.log(data);
+    if (input == "") {
+//        alert("Don't forget to input a movie!");
+        
 
-        const results = data;
+        fetch(emptyURL)
+            .then (function(response) {
+            return response.json();
+            })
+            .then(function(data) {
+            console.log(data);
 
-        console.log(results.hits[1]);
+            const results = data;
 
-        const foodName = results.hits[1].recipe.label;
-        const foodImage = results.hits[1].recipe.images.THUMBNAIL.url;
+            console.log(results.hits[1]);
 
-        console.log(foodName, foodImage);
+            const foodName = results.hits[1].recipe.label;
+            const foodImage = results.hits[1].recipe.images.THUMBNAIL.url;
 
-            const name = $("<p>").text(foodName);
-            const image = $("<img>").attr("src", foodImage);
+            console.log(foodName, foodImage);
 
-            $("#emptySpace").prepend(image, name);
+                const name = $("<p>").text(foodName);
+                const image = $("<img>").attr("src", foodImage);
 
+                $("#emptySpace").prepend(image, name);
         })
-    })
+    }
+    
+    else {
+
+        fetch(queryURL)
+            .then (function(response) {
+            return response.json();
+            })
+            .then(function(data) {
+            console.log(data);
+
+            const results = data;
+
+            console.log(results.hits[1]);
+
+            const foodName = results.hits[1].recipe.label;
+            const foodImage = results.hits[1].recipe.images.THUMBNAIL.url;
+
+            console.log(foodName, foodImage);
+
+                const name = $("<p>").text(foodName);
+                const image = $("<img>").attr("src", foodImage);
+
+                $("#emptySpace").prepend(image, name);
+        })
+    }
+
+
+})
 
 
 //window.onload = function() {
