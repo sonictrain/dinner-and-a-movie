@@ -47,16 +47,17 @@ const createCard = (movies) => {
         let title = $('<h5>').text(movie.title).addClass('card-title');
         let releaseDate = $('<p>').text(movie.release_date);
         let rating = $('<p>').text(movie.vote_average.toFixed(1));
-        // collapsable button for descriptoin
+        // collapsable button for description
         const desBtn = $('<button>')
-        .addClass('btn btn-outline-secondary btn-sm mx-1 mb-2')
-        .attr('type', 'button')
-        .attr('data-bs-toggle', 'collapse')
-        .attr('data-bs-target', '#collapseDesc')
-        .attr('aria-expanded', 'false')
-        .attr('aria-controls', 'collapseDesc')
-        .text('Description');
+            .addClass('btn btn-outline-secondary btn-sm mx-1 mb-2')
+            .attr('type', 'button')
+            .attr('data-bs-toggle', 'collapse')
+            .attr('data-bs-target', '#collapseDesc')
+            .attr('aria-expanded', 'false')
+            .attr('aria-controls', 'collapseDesc')
+            .text('Description');
         let description = $('<p>').html(movie.overview).addClass('desc');
+        console.log(movie.overview);
         const descInnerCard = $('<div>').addClass('card card-body').append(description);
         const descDiv = $('<div>').addClass('collapse').attr('id', 'collapseDesc');
         descDiv.append(descInnerCard);
