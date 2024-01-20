@@ -9,9 +9,6 @@ const options = {
       Authorization: `Bearer ${secret}`
     }
 };
-  
-// search keyword
-let keyword = 'breaking bad';
 
 // search by title api
 async function searchTyping(keyword) {
@@ -21,7 +18,7 @@ async function searchTyping(keyword) {
             data = await res.json();
             $(data.results).each((i, o) => {
                 console.log(o.name);
-                $('#suggested').append($('<li>').addClass('list-group-item').attr('movie-name', o.name).text(o.name));
+                $('#suggested-list').append($('<li>').addClass('dropdown-item').attr('movie-name', o.name).text(o.name));
             });
         } else {
             console.log(`Error ${res.status}`);
@@ -33,7 +30,18 @@ async function searchTyping(keyword) {
 
 // search movie by typing
 $('#inputName').keyup(function(){
+    $('#inputName').val().trim() ? showDropdown(true) : showDropdown(false);
     const searchField = $('#inputName').val().trim();
-    $('#suggested').empty();
+    $('#suggested-list').empty();
     searchTyping(searchField);
 });
+
+function showDropdown(bool) {
+    if (bool) {
+        $('#suggested-list').attr('data-bs-popper', 'static').addClass('show');
+        $('#suggested-dropdown').addClass('show');
+    } else {
+        $('#suggested-list').removeAttr('data-bs-popper', 'static').removeClass('show');
+        $('#suggested-dropdown').removeClass('show');
+    } 
+}
