@@ -20,8 +20,6 @@ getMovies();
 async function getMovies() {
     const searchTerm = "titanic";
     const searchUrl = `https://api.themoviedb.org/3/search/movie?query=${searchTerm}&include_adult=false&language=en-US&page=1`;
-    // ! fetch url for list of movies
-    console.log(searchUrl);
     const options = {
         method: 'GET',
         headers: {
@@ -31,7 +29,6 @@ async function getMovies() {
     }
     const results = await axios.get(searchUrl, options);
     const movies = results.data.results;
-    // ! list of movies
     console.log(movies);
     createCard(movies);
 }
@@ -42,12 +39,11 @@ const createCard = (movies) => {
     // $('#search-term').val('');
     // get fetched data for each movie, create a card, add to search results
     $.each(movies, (i, movie) => {
-        let poster = getImage(movie);
-        console.log(poster);
-        let title = $('<h5>').text(movie.title).addClass('card-title');
-        let releaseDate = $('<p>').text(movie.release_date);
-        let rating = $('<p>').text(movie.vote_average.toFixed(1));
-        // collapsable button for description
+        const poster = getImage(movie.poster_path);
+        const title = $('<h5>').text(movie.title).addClass('card-title');
+        const year = getReleaseYear(movie.release_date);
+        const releaseDate = $('<p>').text(`Release year: ${year}`);
+        const rating = $('<p>').text(movie.vote_average.toFixed(1));
         const desBtn = $('<button>')
             .addClass('btn btn-outline-secondary btn-sm mx-1 mb-2')
             .attr('type', 'button')
@@ -56,32 +52,32 @@ const createCard = (movies) => {
             .attr('aria-expanded', 'false')
             .attr('aria-controls', 'collapseDesc')
             .text('Description');
-        let description = $('<p>').html(movie.overview).addClass('desc');
-        console.log(movie.overview);
+        // create an html element <p> with the description text
+        const description = $('<p>').text(movie.overview).addClass('desc');
+        // create the inner div for the collapsable button with the description
         const descInnerCard = $('<div>').addClass('card card-body').append(description);
+        // create the lower div for description and attach the inner div
         const descDiv = $('<div>').addClass('collapse').attr('id', 'collapseDesc');
         descDiv.append(descInnerCard);
-        const cardBody = $('<div>').addClass('card-body').append(title, releaseDate, rating, desBtn);
+        const cardBody = $('<div>').addClass('card-body').append(title, releaseDate, rating, desBtn, descDiv);
         const newCard = $('<div>').addClass('card').css({width: '15rem', height: 'auto'});
         newCard.append(poster, cardBody);
-        $('#movie-search').prepend(newCard);
+        $('#movie-search').append(newCard);
     })
 }
 
-function getImage(item) {
-    let imageFile = item.poster_path;
-    // console.log(imageFile);
-    if (!imageFile) {
-        // imageUrl = 'https://placehold.co/154x231';
+function getImage(path) {
+    if (!path) {
         imageUrl = "assets/images/movie-poster-not-found.png";
     } else {
-        imageUrl = `https://image.tmdb.org/t/p/w154${imageFile}`;
+        imageUrl = `https://image.tmdb.org/t/p/w154${path}`;
     }
-    // console.log(imageUrl);
-    let image = $('<img>').attr('src', imageUrl).addClass('card-img-top');
+    const image = $('<img>').attr('src', imageUrl).addClass('card-img-top');
     return image;
 }
 
-        // const movieCard = ('<div>').addClass('card').append(imgEl, title, releaseDate, description);
-        // $('.movies').append(movieCard);
-   
+function getReleaseYear(date) {
+    const dateArr = date.split('-');
+    const yearOnly = dateArr[0];
+    return yearOnly;
+}
