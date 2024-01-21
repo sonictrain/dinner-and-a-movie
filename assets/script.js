@@ -19,7 +19,7 @@ $("#button").on("click", function(event) {
     const emptyURL = recipeRoot + "food" + "&app_id=" + APIid + "&app_key=" + APIKey + "&type=public";
 
     if (input == "") {
-//        alert("Don't forget to input a movie!");
+        alert("Don't forget to input a sample food! Here's a yummy dish to hold you over!");
         
 
         fetch(emptyURL)
@@ -30,6 +30,7 @@ $("#button").on("click", function(event) {
             console.log(data);
 
             const results = data;
+//            const number = randInt()
 
             console.log(results.hits[1]);
 
