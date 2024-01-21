@@ -1,11 +1,12 @@
-$(function() {
-    const options = {
-        method: 'GET',
-        headers: {
-            accept: 'application/json',
-            Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIwZGVlNGY1NTQ0ZDA5NGYxZmYyZWE2MWU3YzlkMGFjYSIsInN1YiI6IjY1YTk5MzQxYzRhZDU5MDBjYjk2NTE2OCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.62LSjglzjwChTtYhCfgruCqPBs1Dfk1mGoEi-pqkV6A'
-        }
+const options = {
+    method: 'GET',
+    headers: {
+        accept: 'application/json',
+        Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIwZGVlNGY1NTQ0ZDA5NGYxZmYyZWE2MWU3YzlkMGFjYSIsInN1YiI6IjY1YTk5MzQxYzRhZDU5MDBjYjk2NTE2OCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.62LSjglzjwChTtYhCfgruCqPBs1Dfk1mGoEi-pqkV6A'
     }
+}
+
+$(function() {
     $('#movie-search').click(async (e) => {
         e.preventDefault();
         const searchTerm = $('#movie-keyword').val();
@@ -90,6 +91,51 @@ $(document).on('click', '.watchOptionsBtn', function(options) {
     const thisMovieID = $(this).data('movieid');
     getMovieLink(thisMovieID);
 })
+
+// ----- SEARCH MOVIE OR TV SERIE BY TYPING FUNCTION AND UPDATE THE DROPDOWN WITH THE BEST MATCH ------
+// !TODO: SORT BY POPULARITY 
+async function searchTyping(keyword) {
+    try {
+        const res = await fetch(`https://api.themoviedb.org/3/search/movie?query=${keyword}&include_adult=false&language=en-US&page=1`, options);
+        if (res.status === 200) {
+            data = await res.json();
+            $(data.results).each((i, o) => {
+                // create list item
+                const listItem = $('<li>').addClass('dropdown-item d-flex gap-2').attr('movie-name', o.id);
+                // add movie title
+                listItem.append($('<p>').addClass('mb-0 me-auto').text(o.title));
+                // add release date in a pill badge
+                listItem.append($('<span>').addClass('badge rounded-pill text-bg-info').text(`Date ${o.release_date}`));
+                // add popularity score in a pill badge
+                listItem.append($('<span>').addClass('badge rounded-pill text-bg-warning').text(`Popularity ${o.popularity}`));
+                $('#suggested-list').append(listItem);
+            });
+        } else {
+            console.log(`Error ${res.status}`);
+        }
+    } catch (err) {
+        console.log(err);
+    }
+}
+
+// ----- SEARCH MOVIE OR TV SERIE BY TYPING EVENT ------ 
+$('#movie-keyword').keyup(function(){
+    $('#movie-keyword').val().trim() ? showDropdown(true) : showDropdown(false);
+    const searchField = $('#movie-keyword').val().trim();
+    $('#suggested-list').empty();
+    searchTyping(searchField);
+})
+
+// ----- FUNCTION TO OPEN AND CLOSE THE SEARCH DROPDOWN LIST ------ pass true to open and false to close
+function showDropdown(bool) {
+    if (bool) {
+        $('#suggested-list').attr('data-bs-popper', 'static').addClass('show');
+        $('#suggested-dropdown').addClass('show');
+    } else {
+        $('#suggested-list').removeAttr('data-bs-popper', 'static').removeClass('show');
+        $('#suggested-dropdown').removeClass('show');
+    } 
+}
 
 // ----- FUNCTION TO FETCH THE WATCH PROVIDERS ------
 async function getMovieLink(id) {
