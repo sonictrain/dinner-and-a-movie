@@ -20,18 +20,19 @@
                 <h1 class="display-3">Dinner and a Movie</h1>
                 <!-- select form for dinner and movie choice -->
                 <div class="row justify-content-around">
-                    <!-- input group for MOVIE Search  -->
-                    <div class="col">
-                        <div class="input-group">
-                            <input type="text" class="form-control" placeholder="What do you want to watch tonight?" aria-label="Movie search" aria-describedby="movie-search" id="movie-keyword">
-                            <button class="btn btn-primary" type="button" id="movie-search">Search</button>
+                    <!-- input group for MOVIE & FOOD Search  -->
+                    <div class="col-6">
+                        <div class="d-flex">
+                            <div class="input-group">
+                                <input type="text" class="form-control" id="movie-keyword" aria-label="Text input with segmented dropdown button" placeholder="Input a Movie or a TV Serie">
+                                <button class="btn btn-primary" type="button" id="movie-search">Search</button>
+                                <button type="button" class="btn btn-primary dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-expanded="false" id="suggested-dropdown">
+                                    <span class="visually-hidden">Toggle Dropdown</span>
+                                </button>
+                                <ul class="dropdown-menu w-100 dropdown-menu-end" id="suggested-list">
+                                </ul>
+                              </div>
                         </div>
-                    </div>
-                    <!-- input group for FOOD Search  -->
-                    <div class="col">
-                        <div class="input-group">
-                            <input type="text" class="form-control" placeholder="What do you want to eat tonight?" aria-label="Food search" aria-describedby="food-search">
-                            <button class="btn btn-primary" type="button" id="food-search">Search</button>
                     </div>
                 </div>
             </div>
@@ -110,14 +111,11 @@
         </div>
     </div>
 
- 
-    
-    
-    
+
     </main>
 
     <footer>
-        <div class="container text-center py-0 my-0 mx-auto">
+        <div class="container sticky-bottom text-center py-0 my-0 mx-auto">
             <div id="tmdb-attribution" class="row">
                 <div class="col-lg-1">
                     <a href="https://developer.themoviedb.org/docs/getting-started" target="_blank">
