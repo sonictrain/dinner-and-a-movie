@@ -9,7 +9,11 @@ $(function() {
     $('#movie-search').click(async (e) => {
         e.preventDefault();
         const searchTerm = $('#movie-keyword').val();
-        getMovies(searchTerm, options);
+        if (searchTerm === '') {
+            $('#enterMovieTitleAlert').modal('show');
+        } else {
+            getMovies(searchTerm, options);
+        }
     })
 })
 
@@ -19,11 +23,16 @@ async function getMovies(keyword, options) {
     try {
         const results = await axios.get(searchUrl, options);
         const movies = results.data.results;
-        console.log(movies);
-        createCard(movies);
+        // make sure the search returns a valid result
+        if (movies.length > 0) {
+            createCard(movies);
+        } else if (movies.length === 0) {
+            $('#enterMovieTitleAlert').modal('show');
+            $('#movie-keyword').val('');
+        }
     } catch(err) {
         console.log("Error with MOVIE search", err);
-        // TODO: add a modal with error message
+        $('#errorMovieSearchAlert').modal('show');
     }
 }
 
@@ -77,7 +86,6 @@ const createCard = (movies) => {
 
 $(document).on('click', '.providersBtn', function(options) {
     const thisMovieID = $(this).data('movieid');
-    console.log(thisMovieID);
     getMovieLink(thisMovieID);
 })
 
@@ -91,36 +99,21 @@ async function getMovieLink(id) {
                 Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIwZGVlNGY1NTQ0ZDA5NGYxZmYyZWE2MWU3YzlkMGFjYSIsInN1YiI6IjY1YTk5MzQxYzRhZDU5MDBjYjk2NTE2OCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.62LSjglzjwChTtYhCfgruCqPBs1Dfk1mGoEi-pqkV6A'
             }
         }
-        // fetch(`https://api.themoviedb.org/3/movie/${id}/watch/providers`, options)
-        //     .then(response => response.json())
-        //     .then(response => console.log(response))
-        //     .catch(err => console.error(err));
-
-
         const results = await axios.get(`https://api.themoviedb.org/3/movie/${id}/watch/providers`, options);
-        console.log(results.data.results);
         const movieLinkGB = results.data.results.GB;
         if (!movieLinkGB) {
-            // TODO: change into a modal
-            alert("Not available in the UK or no link found");
+            $('#notAvailableUKAlert').modal('show');
         } else {
-            // console.log(movieLinkGB);
             const movieLink = movieLinkGB.link;
-            console.log(movieLink);
+            // TODO: replace with a modal
             var newTab = window.open(movieLink, '_blank');
             newTab.focus();
-    //         // window.location.href = movieLink;
         }
     } catch(err) {
         console.log("Error with PROVIDERS search", err);
-        // TODO: change int a modal with error message
-        alert("No link found");
+        $('#notAvailableUKAlert').modal('show');
     }
 }
-
-
-
-
 
 // ---- AUXILIARY FUNCTION TO GET POSTER IMAGE --- 
 function getImage(path) {

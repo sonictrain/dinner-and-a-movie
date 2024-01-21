@@ -54,7 +54,68 @@
                 </div>
             </div>
         </section>
+    
+    <!-- MODALS -->
+    <!-- #1 empty search -->
+    <div class="modal fade" tabindex="-1" role="dialog" id="enterMovieTitleAlert">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                <h5 class="modal-title">&#x1F3AC; Hello!</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                <p>Please enter a valid movie title or keyword!</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- #2 error with MOVIE SEARCH -->
+    <div class="modal fade" tabindex="-1" role="dialog" id="errorMovieSearchAlert">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                <h5 class="modal-title">&#x1F3A5; Sorry!</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                <p>No movie found. Please try another one!</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- #3 NO UK providers or no link -->
+    <div class="modal fade" tabindex="-1" role="dialog" id="notAvailableUKAlert">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                <h5 class="modal-title">&#x1F3A5; Sorry!</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                <p>This movie is not available in the UK or no link found. Please try another one!</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+ 
+    
+    
+    
     </main>
+
     <footer>
         <div class="container text-center py-0 my-0 mx-auto">
             <div id="tmdb-attribution" class="row">
