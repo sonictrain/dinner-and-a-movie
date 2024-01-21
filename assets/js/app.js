@@ -73,18 +73,20 @@ const createCard = (movies) => {
         // create the lower div for description and attach the inner div
         const descDiv = $('<div>').addClass('collapse').attr('id', 'collapseDesc');
         descDiv.append(descInnerCard);
-        const providersBtn = $('<button>')
-            .addClass('btn btn-primary providersBtn')
+        const cardBody = $('<div>').addClass('card-body').append(title, releaseDate, rating, desBtn, descDiv);
+        const watchBtn = $('<button>')
+            .addClass('btn btn-primary watchOptionsBtn')
             .attr('data-movieID', movieID)
-            .text('Watch');
-        const cardBody = $('<div>').addClass('card-body').append(title, releaseDate, rating, desBtn, descDiv, providersBtn);
+            .text('Viewing Options');
+        const cardFooter = $('<div>').addClass('card-footer');
+        cardFooter.append(watchBtn)
         const newCard = $('<div>').addClass('card').css({width: '15rem', height: 'auto'});
-        newCard.append(poster, cardBody);
+        newCard.append(poster, cardBody, cardFooter);
         $('#movie-results').append(newCard);
     })
 }
 
-$(document).on('click', '.providersBtn', function(options) {
+$(document).on('click', '.watchOptionsBtn', function(options) {
     const thisMovieID = $(this).data('movieid');
     getMovieLink(thisMovieID);
 })
