@@ -45,3 +45,34 @@ function showDropdown(bool) {
         $('#suggested-dropdown').removeClass('show');
     } 
 }
+
+async function popular() {
+    try {
+        const res = await fetch(`https://api.themoviedb.org/3/movie/popular?language=en-US&page=1`, options);
+        if (res.status === 200) {
+            data = await res.json();
+            $(data.results).each((i, o) => {
+                console.log(o.title);
+                $('#popular-movies').append(createPopularCard(`https://image.tmdb.org/t/p/w500/${o.poster_path}`, o.title, o.overview));
+            });
+        } else {
+            console.log(`Error ${res.status}`);
+        }
+    } catch (err) {
+        console.log(err);
+    }
+};
+
+popular();
+
+function createPopularCard(posterLink, title, overview) {
+    return `<div class="card col-1 h-100" style="width: 18rem;">
+                <img src="${posterLink}" class="card-img-top" alt="${title} poster">
+                <div class="card-body">
+                    <h5 class="card-title">${title}</h5>
+                    <p class="card-text">${overview}</p>
+                    <a href="#" class="btn btn-primary">Link to call API Search</a>
+                </div>
+            </div>`
+};
+
