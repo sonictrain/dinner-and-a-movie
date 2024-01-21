@@ -13,6 +13,19 @@
     src: url("../Fonts/CorleoneDue.ttf");
 }
 
+html, body {
+    height: 100%;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+}
+
+main {
+    flex: 1;
+}
+
 /* header */
 .jumbotron {
     text-align: center;
@@ -49,4 +62,17 @@ h1 {
 /* body */
 body {
     background-color: #610304;
+}
+
+#tmdb-logo {
+    width: 5rem; 
+    height: auto;
+}
+
+footer {
+    margin-top: auto;
+    background-color: #0d253f;
+    color: white;
+    height: 5em;
+    font-size: 0.75rem;
 }
