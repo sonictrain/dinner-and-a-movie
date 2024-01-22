@@ -13,6 +13,19 @@
     src: url("../Fonts/CorleoneDue.ttf");
 }
 
+html, body {
+    height: 100%;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+}
+
+main {
+    flex: 1;
+}
+
 /* header */
 .jumbotron {
     text-align: center;
@@ -21,7 +34,7 @@
     background-repeat: no-repeat;
     color: black;
     border-radius: 0;
-    height: 300px;
+    height: 450px;
     padding: 80px;
     width: 100%;
     object-fit: contain;
@@ -30,23 +43,48 @@
 h1 {
     color: #ffc000;
     font-family: CorleoneDue;
-    font-size: 900px;
+    font-size: 150px;
     font-weight: 500;
-    text-shadow: -2px -2px 0 #000, 2px -2px 0 #000, -2px 2px 0 #000, 2px 2px 0 #000;
+    margin-bottom: 20px;
+    margin-top: 20px;
+    text-shadow: -3px -3px 0 #000, 3px -3px 0 #000, -3px 3px 0 #000, 3px 3px 0 #000;
 }
 
 #hero-text {
-    color: #ffc000;
+    color: #fadd87;
     font-family: Pacifico-Regular;
-    font-size: 25px;
+    font-size: 40px;
+    margin-top: 20px;
+    text-shadow: -2px -2px 0 #000, 2px -2px 0 #000, -2px 2px 0 #000, 2px 2px 0 #000;
 }
 
 .form-label {
-    margin: 20px;
+    border-radius: 5px;
+    margin: 50px;
     padding: 5px;
+}
+
+.btn {
+    background-color: #ffc000;
+    border: none;
+    border-radius: 5px;
+    color: black;
 }
 
 /* body */
 body {
     background-color: #610304;
+}
+
+#tmdb-logo {
+    width: 5rem; 
+    height: auto;
+}
+
+footer {
+    margin-top: auto;
+    background-color: #0d253f;
+    color: white;
+    height: 5em;
+    font-size: 0.75rem;
 }
