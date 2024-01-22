@@ -45,7 +45,7 @@ h1 {
     font-family: CorleoneDue;
     font-size: 150px;
     font-weight: 500;
-    margin-bottom: 20px;
+    margin-bottom: 30px;
     margin-top: 20px;
     text-shadow: -3px -3px 0 #000, 3px -3px 0 #000, -3px 3px 0 #000, 3px 3px 0 #000;
 }
@@ -79,6 +79,7 @@ body {
 #tmdb-logo {
     width: 5rem; 
     height: auto;
+    margin: 10px;
 }
 
 footer {
