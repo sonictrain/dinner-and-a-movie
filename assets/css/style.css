@@ -59,7 +59,6 @@ h1 {
 }
 
 .form-label {
-    border-radius: 5px;
     margin: 50px;
     padding: 5px;
 }
@@ -67,7 +66,6 @@ h1 {
 .btn {
     background-color: #ffc000;
     border: none;
-    border-radius: 5px;
     color: black;
 }
 
