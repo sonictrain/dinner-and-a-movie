@@ -13,6 +13,7 @@ $(function() {
         if (searchTerm === '') {
             $('#enterMovieTitleAlert').modal('show');
         } else {
+            showDropdown(false);
             getMovies(searchTerm, options);
         }
     })
@@ -99,9 +100,14 @@ async function searchTyping(keyword) {
         const res = await fetch(`https://api.themoviedb.org/3/search/movie?query=${keyword}&include_adult=false&language=en-US&page=1`, options);
         if (res.status === 200) {
             data = await res.json();
-            $(data.results).each((i, o) => {
+            // sort array of object by popularity and trim it to the best 10 elements
+            const sortedArray = data.results.sort((a, b) => b.popularity - a.popularity).slice(0,10);
+            // empty the dropdown list
+            $('#suggested-list').empty();
+            // and append each element of the array
+            $(sortedArray).each((i, o) => {
                 // create list item
-                const listItem = $('<li>').addClass('dropdown-item d-flex gap-2').attr('movie-name', o.id);
+                const listItem = $('<li>').addClass('dropdown-item d-flex gap-2').attr('movie-id', o.id);
                 // add movie title
                 listItem.append($('<p>').addClass('mb-0 me-auto').text(o.title));
                 // add release date in a pill badge
@@ -122,7 +128,6 @@ async function searchTyping(keyword) {
 $('#movie-keyword').keyup(function(){
     $('#movie-keyword').val().trim() ? showDropdown(true) : showDropdown(false);
     const searchField = $('#movie-keyword').val().trim();
-    $('#suggested-list').empty();
     searchTyping(searchField);
 })
 
@@ -140,13 +145,6 @@ function showDropdown(bool) {
 // ----- FUNCTION TO FETCH THE WATCH PROVIDERS ------
 async function getMovieLink(id) {
     try {
-        const options = {
-            method: 'GET',
-            headers: {
-                accept: 'application/json',
-                Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIwZGVlNGY1NTQ0ZDA5NGYxZmYyZWE2MWU3YzlkMGFjYSIsInN1YiI6IjY1YTk5MzQxYzRhZDU5MDBjYjk2NTE2OCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.62LSjglzjwChTtYhCfgruCqPBs1Dfk1mGoEi-pqkV6A'
-            }
-        }
         const results = await axios.get(`https://api.themoviedb.org/3/movie/${id}/watch/providers`, options);
         const movieLinkGB = results.data.results.GB;
         if (!movieLinkGB) {
