@@ -14,6 +14,7 @@ $(function() {
             $('#enterMovieTitleAlert').modal('show');
         } else {
             getMovies(searchTerm, options);
+            getFood(searchTerm);
         }
     })
 })
@@ -179,4 +180,190 @@ function getReleaseYear(date) {
     const dateArr = date.split('-');
     const yearOnly = dateArr[0];
     return yearOnly;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// ----- FUNCTION TO GET FOOD FROM FETCHED
+async function getFood() {
+
+    const recipeRoot = "https://api.edamam.com/api/recipes/v2?type=public&q=";
+    const APIid = "10153ee1";
+    const APIKey = "027bd5bbabe6fabd88736c41b30ffe19";
+    const searchTerm = $('#movie-keyword').val();
+    const foodURL = recipeRoot + searchTerm + "&app_id=" + APIid + "&app_key=" + APIKey;
+
+
+    try {
+        const results = await axios.get(foodURL);
+        const foodies = results.data.hits;
+
+        console.log(foodies);
+        console.log(foodies.length)
+        // make sure the search returns a valid result
+        if (foodies.length > 0) {
+            createFoodCard(foodies);
+        } else if (foodies.length === 0) {
+//        $('#enterMovieTitleAlert').modal('show');
+        $('#movie-keyword').val('');
+        } 
+    }   catch(err) {
+        console.log("Error with FOOD search.", err);
+//        $('#errorMovieSearchAlert').modal('show');
+    }
+}
+
+// ------ FUNCTION TO CREATE CARDS WITH FOODS' INFO -------
+const createFoodCard = (foodies) => {
+    // clear the search field
+    $('#movie-keyword').val('');
+    // clear previous results
+    $('#dinner-options').empty();
+    // get fetched data for each food and its ingredients, create a card, add to search results
+    $.each(foodies, (i, foodie) => {
+        const foodName = $('<h5>')
+            .text(foodie.recipe.label)
+            .addClass('card-title');
+        const foodImage = foodie.recipe.images.THUMBNAIL.url
+        const foodieImage = getFoodImage(foodie.recipe.images.REGULAR.url);
+        const recipePage = foodie.recipe.shareAs;
+        
+        const ingredients = foodie.recipe.ingredientLines;
+        console.log(ingredients);
+        var ingredientsList = JSON.stringify(ingredients);
+        console.log(ingredientsList);
+
+        var parse = JSON.parse(ingredientsList)
+        console.log(parse);
+
+        for (var i = 0; i < ingredients.length; i++)    
+        console.log(ingredients[i]);
+            
+        for (var i = 0; i < ingredients.length; i++) {
+            $("ul li").text(function(index) {
+                return 
+            })    
+            page = $('<li>')
+                .text(ingredients[i])
+                .addClass('ingredient');                
+                ul = $('<ul>')
+                .append(page); 
+            }
+
+            const foodBtn = $('<button>')
+            .addClass('btn btn-outline-secondary btn-md mx-1 mb-2')
+            .attr('type', 'button')
+            .attr('data-bs-toggle', 'collapse')
+            .attr('data-bs-spy', 'scroll')            
+            .attr('data-bs-target', '#collapseDesc')
+            .attr('aria-expanded', 'false')
+            .attr('aria-controls', 'collapseDesc')
+            .text('Ingredient List');
+
+            // Creates the larger div
+            // create the inner div for the collapsable button with the recipe
+            const foodInnerCard = $('<div>')
+                .addClass('card card-body')
+                .addClass('collapseCard')
+                .append(ul);
+            // create the lower div for recipe and attach the inner div
+            const foodDiv = $('<div>')
+                .addClass('collapse')
+                .attr('id', 'collapseDesc');    
+            foodDiv.append(foodInnerCard);
+            const foodBody = $('<div>')
+                .addClass('card-body')
+                .attr('data-bs-spy', 'scroll')            
+                .attr('data-bs-target', '#collapseCard')
+                .append(foodName, foodBtn, foodDiv);
+
+            //Creates footer with Recipe Button
+            const recipeBtn = $('<button>')
+                .addClass('btn btn-primary foodRecipeBtn')
+                .attr('data-movieID', "text")
+                .text('Recipe');
+            const foodFooter = $('<div>').addClass('card-footer');
+                foodFooter.append(recipeBtn)
+
+            //Combines IMAGE, NAME, BODY, & FOOTER
+            const newFoodCard = $('<div>')
+                .addClass('card')
+                .css({width: '15rem', height: '592px'});
+            newFoodCard.append(foodieImage, foodBody, foodFooter);
+            $('#dinner-options').append(newFoodCard);
+    })
+}
+
+function getFoodImage(link) {
+    if (!link) {
+        foodImageUrl = "assets/images/movie-poster-not-found.png";
+    } else {
+        foodImageUrl = `${link}`;
+    }
+    const foodPicture = $('<img>').attr('src', foodImageUrl).addClass('card-img-top');
+    return foodPicture;
 }
