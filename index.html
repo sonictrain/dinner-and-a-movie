@@ -4,11 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css"
-      rel="stylesheet"
-      integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ"
-      crossorigin="anonymous"/>
-    <link rel="stylesheet" href="./assets/css/style.css" />
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css"
+        rel="stylesheet"
+        integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ"
+        crossorigin="anonymous"/>
+    <link rel="stylesheet" href="assets/css/style.css" />
     <title>Dinner and a Movie</title>
 </head>
 
@@ -20,21 +20,121 @@
                 <h1 class="display-3">Dinner and a Movie</h1>
                 <!-- select form for dinner and movie choice -->
                 <div class="row justify-content-around">
-                    <input type="keyword" class="col form-label" aria-label="select movie options" placeholder="What do you want to watch tonight?">
-                    </input>
-                    <input type="keyword" class="col form-label" aria-label="select food options" placeholder="What do you want to eat tonight?">
-                    </input>
+                    <!-- input group for MOVIE & FOOD Search  -->
+                    <div class="col-6">
+                        <div class="d-flex">
+                            <div class="input-group">
+                                <input type="text" class="form-control" id="movie-keyword" aria-label="Text input with segmented dropdown button" placeholder="Input a Movie or a TV Serie">
+                                <button class="btn btn-primary" type="button" id="movie-search">Search</button>
+                                
+                                <ul class="dropdown-menu w-100 dropdown-menu-end" id="suggested-list">
+                                </ul>
+                                </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </header>
     <!-- section to display returned data -->
     <main>
-        
+        <section class="row returned-data justify-content-around">
+            <!-- container to hold move/tv show suggestion -->
+            <div class="col">
+                <section id="movie-results" class="row"></section>
+            </div>
+            <!-- container to hold dinner suggestion -->
+            <div class="col">
+                <div class="card col" id="dinner-options" style="width: 18rem;">
+                    <img src="..." class="card-img-top" alt="image of suggested meal">
+                    <div class="card-body">
+                    <p class="card-text">Dinner ingredients</p>
+                    </div>
+                </div>
+            </div>
+        </section>
     
-    </main>
-    <footer>
+    <!-- MODALS -->
+    <!-- #1 empty search -->
+    <div class="modal fade" tabindex="-1" role="dialog" id="enterMovieTitleAlert">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                <h5 class="modal-title">&#x1F3AC; Hello!</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                <p>Please enter a valid movie title or keyword!</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    
+    <!-- #2 error with MOVIE SEARCH -->
+    <div class="modal fade" tabindex="-1" role="dialog" id="errorMovieSearchAlert">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                <h5 class="modal-title">&#x1F3A5; Sorry!</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                <p>No movie found. Please try another one!</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
+    <!-- #3 NO UK providers or no link -->
+    <div class="modal fade" tabindex="-1" role="dialog" id="notAvailableUKAlert">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                <h5 class="modal-title">&#x1F3A5; Sorry!</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                <p>This movie is not available in the UK or no link found. Please try another one!</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    </main>
+
+    <footer>
+        <div class="container sticky-bottom text-center py-0 my-0 mx-auto">
+            <div id="tmdb-attribution" class="row">
+                <div class="col-lg-1">
+                    <a href="https://developer.themoviedb.org/docs/getting-started" target="_blank">
+                        <img src="assets/images/tmdb-logo.png" alt="TMDB logo" id="tmdb-logo">
+                    </a>
+                </div>
+                <div class="col-lg-6 mb-0">
+                    <p>This product uses the TMDB API but is not endorsed or certified by TMDB.</p>
+                </div>
+            </div>
+        </div>
     </footer>
+
+
+    <!-- jQuery -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <!-- Include Bootstrap JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Axios -->
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="assets/js/app.js"></script>
 </body>
 </html>
