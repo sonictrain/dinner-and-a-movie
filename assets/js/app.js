@@ -289,7 +289,7 @@ const createFoodCard = (foodies) => {
         const foodImage = foodie.recipe.images.THUMBNAIL.url
         const foodieImage = getFoodImage(foodie.recipe.images.REGULAR.url);
         const recipePage = foodie.recipe.shareAs;
-        const recipeSource = foodie.recipe.source;
+        // const recipeSource = foodie.recipe.source;
         const recipeLink = foodie.recipe.url;
         const ingredients = foodie.recipe.ingredientLines;
         // console.log(ingredients);
@@ -343,7 +343,7 @@ const createFoodCard = (foodies) => {
             //Creates footer with Recipe Button
             const recipeBtn = $('<button>')
                 .addClass('btn btn-primary btn-brand-color foodRecipeBtn')
-                .attr('data-movieID', "text")
+                .attr('data-recipeUrl', recipeLink)
                 .text('Recipe');
             const foodFooter = $('<div>').addClass('card-footer');
                 foodFooter.append(recipeBtn)
@@ -356,6 +356,17 @@ const createFoodCard = (foodies) => {
             $('#dinner-options').append(newFoodCard);
     })
 }
+
+$(document).on('click', '.foodRecipeBtn', function() {
+    const recipeUrl = $(this).data('recipeurl');
+    if (recipeUrl != '') {
+        // TODO: replace with a modal
+        var newTab = window.open(recipeUrl, '_blank');
+        newTab.focus();
+    } else {
+        $('#noRecipeLinkAlert').modal('show');
+    }
+})
 
 function getFoodImage(link) {
     if (!link) {
