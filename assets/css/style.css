@@ -77,7 +77,10 @@ body {
 #tmdb-logo {
     width: 5rem; 
     height: auto;
+<<<<<<< HEAD
     margin: 10px;
+=======
+>>>>>>> 50a208220b3aace8ccee3bb067836b25746f6873
 }
 
 footer {
@@ -86,4 +89,8 @@ footer {
     color: white;
     height: 5em;
     font-size: 0.75rem;
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> 50a208220b3aace8ccee3bb067836b25746f6873
