@@ -76,9 +76,10 @@ footer {
     background-color: #0d253f;
     color: white;
     font-size: 0.75rem;
-    height: 8em;
+    height: auto;
     text-align: center;
     margin-top: 10px;
+    padding: 10px 0px 5px 0px;
 }
 
 #tmdb-logo {
