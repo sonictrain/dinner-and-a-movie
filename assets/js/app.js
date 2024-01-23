@@ -133,7 +133,6 @@ async function getPopularMovie() {
         if (res.status === 200) {
             data = await res.json();
             $(data.results).each((i, o) => {
-                console.log(o.title);
                 $('#popular-movies').append(createPopularCard(`https://image.tmdb.org/t/p/w500/${o.poster_path}`, o.title, o.id));
             });
         } else {
@@ -155,8 +154,9 @@ function createPopularCard(posterLink, title, id) {
             </div>`
 };
 
+getMovieByID()
 // ----- SEARCH MOVIE BY ID ------
-async function getPopularMovie() {
+async function getMovieByID() {
     try {
         const res = await fetch(`https://api.themoviedb.org/3/movie/787699?language=en-US`, options);
         if (res.status === 200) {
