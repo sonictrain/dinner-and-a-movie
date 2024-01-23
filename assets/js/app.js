@@ -78,7 +78,7 @@ const createCard = (movies) => {
         descDiv.append(descInnerCard);
         const cardBody = $('<div>').addClass('card-body').append(title, releaseDate, rating, desBtn, descDiv);
         const watchBtn = $('<button>')
-            .addClass('btn btn-primary watchOptionsBtn')
+            .addClass('btn btn-primary btn-brand-color watchOptionsBtn')
             .attr('data-movieID', movieID)
             .text('Viewing Options');
         const cardFooter = $('<div>').addClass('card-footer');
@@ -306,7 +306,7 @@ const createFoodCard = (foodies) => {
 
             //Creates footer with Recipe Button
             const recipeBtn = $('<button>')
-                .addClass('btn btn-primary foodRecipeBtn')
+                .addClass('btn btn-primary btn-brand-color foodRecipeBtn')
                 .attr('data-movieID', "text")
                 .text('Recipe');
             const foodFooter = $('<div>').addClass('card-footer');
