@@ -322,10 +322,10 @@ const createFoodCard = (foodies) => {
             //Combines IMAGE, NAME, BODY, & FOOTER
             const newFoodCard = $('<div>')
                 .addClass('card')
-                .css({width: '15rem', height: '592px'});
+                .css({width: '15rem',});
             newFoodCard.append(foodieImage, foodBody, foodFooter);
             $('#food-results').append(newFoodCard);
- 
+
     })
 }
 
