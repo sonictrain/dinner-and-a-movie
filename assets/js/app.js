@@ -252,6 +252,11 @@ const createFoodCard = (foodies) => {
         const foodName = $('<h5>')
             .text(foodie.recipe.label)
             .addClass('card-title');
+        const foodCuisine = $('<p>')
+            .text("Cuisine Type: " + foodie.recipe.cuisineType);
+
+        const foodPrecautions = $('<p>')
+            .text("Dietary Precautions: " + foodie.recipe.cautions);
         const foodImage = foodie.recipe.images.THUMBNAIL.url
         const foodieImage = getFoodImage(foodie.recipe.images.REGULAR.url);
         const recipePage = foodie.recipe.shareAs;
@@ -303,56 +308,42 @@ const createFoodCard = (foodies) => {
         const foodBody = $('<div>')
             .addClass('card-body')
             .attr('data-bs-spy', 'scroll')            
-            .attr('data-bs-target', '#collapseCard')
-            .append(foodName, foodBtn, foodDiv);
+            .attr('data-bs-target', '#collapseDesc')
+            .attr('aria-expanded', 'false')
+            .attr('aria-controls', 'collapseDesc')
+            .text('Ingredient List');
 
-        //Creates footer with Recipe Button
-        const recipeBtn = $('<button>')
-            .addClass('btn btn-primary btn-brand-color foodRecipeBtn')
-            .attr('data-recipeUrl', recipeLink)
-            .text('Recipe');
-        const foodFooter = $('<div>').addClass('card-footer');
-            foodFooter.append(recipeBtn)
+            // Creates the larger div
+            // create the inner div for the collapsable button with the recipe
+            const foodInnerCard = $('<div>')
+                .addClass('card card-body')
+                .addClass('collapseCard')
+                .append(page);
+            // create the lower div for recipe and attach the inner div
+            const foodDiv = $('<div>')
+                .addClass('collapse')
+                .attr('id', 'collapseDesc');    
+            foodDiv.append(foodInnerCard);
+            const foodBody = $('<div>')
+                .addClass('card-body')
+                .attr('data-bs-spy', 'scroll')            
+                .attr('data-bs-target', '#collapseCard')
+                .append(foodName, foodCuisine, foodPrecautions, foodBtn, foodDiv);
 
-        //Combines IMAGE, NAME, BODY, & FOOTER
-        const newFoodCard = $('<div>')
-            .addClass('card')
-            .css({width: '15rem', height: '592px'});
-        newFoodCard.append(foodieImage, foodBody, foodFooter);
-        $('#food-results').append(newFoodCard);
+            //Creates footer with Recipe Button
+            const recipeBtn = $('<button>')
+                .addClass('btn btn-primary btn-brand-color foodRecipeBtn')
+                .attr('data-recipeUrl', recipeLink)
+                .text('Recipe');
+            const foodFooter = $('<div>').addClass('card-footer');
+                foodFooter.append(recipeBtn)
 
-            // function thisRecipe() {
-            //     console.log(thisButtonRecipe)
-            // }
-
-            // const foodRoot = "http://www.edamam.com/recipe/";
-            // const myString = recipePage;
-            // const myNewString = myString.replace("http://www.edamam.com/recipe/", "");
-            // console.log(myNewString);
-            // const totalLink = foodRoot + myNewString;
-            // console.log(totalLink);
-            // getFoodLink();
-
-            // $('.foodRecipeBtn').each(function() {
-            //     $(this).on('click', function() {
-            //         getFoodLink();
-            //     })
-            // } 
-//                console.log(thisButtonRecipe);
-            
-
-            // )
-            // const shareAsURL = $(this).attr('href', recipePage);
-            // console.log(shareAsURL);
-            // console.log(recipePage);
-
-            // var a = console.log(recipePage);
-            // const recipeShare = getShareAs(recipePage);
-            // var newFoodTab = window.open(recipePage, '_blank');
-            // newFoodTab.focus();    
-
-
-
+            //Combines IMAGE, NAME, BODY, & FOOTER
+            const newFoodCard = $('<div>')
+                .addClass('card')
+                .css({width: '15rem', height: '592px'});
+            newFoodCard.append(foodieImage, foodBody, foodFooter);
+            $('#food-results').append(newFoodCard);
     })
 }
 
