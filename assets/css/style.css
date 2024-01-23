@@ -50,6 +50,10 @@ h1 {
     text-shadow: -3px -3px 0 #000, 3px -3px 0 #000, -3px 3px 0 #000, 3px 3px 0 #000;
 }
 
+h2 {
+    color: white;
+}
+
 #hero-text {
     color: #fadd87;
     font-family: Pacifico-Regular;
@@ -77,10 +81,7 @@ body {
 #tmdb-logo {
     width: 5rem; 
     height: auto;
-<<<<<<< HEAD
     margin: 10px;
-=======
->>>>>>> 50a208220b3aace8ccee3bb067836b25746f6873
 }
 
 footer {
@@ -89,8 +90,4 @@ footer {
     color: white;
     height: 5em;
     font-size: 0.75rem;
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> 50a208220b3aace8ccee3bb067836b25746f6873
