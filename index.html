@@ -40,15 +40,19 @@
     <!-- section to display returned data -->
     <main>
         <section class="row returned-data justify-content-around">
+            <!-- container to show popular movies at the start -->
+            <section class="row p-3" id="popular-carousel">
+                <h2>Popular Movies</h2>
+                <div class="d-flex gap-3 overflow-x-scroll p-3" id="popular-movies" class="row"></div>
+            </section>
             <!-- container to hold move/tv show suggestion -->
             <div class="col-6">
                 <section id="movie-results" class="row"></section>
-                <section class="row p-3">
-                    <h2>Popular Movies</h2>
-                    <div class="d-flex gap-3 overflow-x-scroll p-3" id="popular-movies" class="row"></div>
-                </section>
             </div>
             <!-- container to hold dinner suggestion -->
+            <div class="col-6">
+                <section id="food-results" class="row"></section>
+            </div>
         </section>
 
         <!-- MODALS -->
@@ -70,23 +74,6 @@
             </div>
         </div>
 
-    <!-- #4 no RECIPE LINK found -->
-    <div class="modal fade" tabindex="-1" role="dialog" id="noRecipeLinkAlert">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                <h5 class="modal-title">&#x1F37F; Sorry!</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                <p>Sorry, no recipe link found. Please try another one!</p>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                </div>
-            </div>
-        </div>
-    </div>
 
         <!-- #2 error with MOVIE SEARCH -->
         <div class="modal fade" tabindex="-1" role="dialog" id="errorMovieSearchAlert">
