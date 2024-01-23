@@ -169,7 +169,8 @@ async function getMovieByID() {
             console.log(data);
             $('#movie-results').append(createDetailCard("Movie Details", `https://image.tmdb.org/t/p/w500/${data.poster_path}`, data.title, data.release_date, data.tagline, data.overview, USDollar.format(data.revenue), data.vote_average, data.homepage, `https://www.imdb.com/title/${data.imdb_id}/`));
             $(data.genres).each((i,g) => $('#categories-container').append($('<span>').addClass('badge rounded-pill text-bg-warning').text(g.name)));
-
+            $('#buttons').append($('<a>').addClass('col btn btn-primary').attr('href', data.homepage).text('Official Website'))
+                         .append($('<a>').addClass('col btn btn-primary').attr('href', `https://www.imdb.com/title/${data.imdb_id}/`).text('IMDB Website'));
         } else {
             console.log(`Error ${res.status}`);
         }
@@ -353,7 +354,7 @@ function getFoodImage(link) {
     return foodPicture;
 }
 
-function createDetailCard(sectionTitle, posterLink, title, releaseDate, tagLine, description, revenues, vote, officialUrl, imbdURL) {
+function createDetailCard(sectionTitle, posterLink, title, releaseDate, tagLine, description, revenues, vote) {
     return `<h2>${sectionTitle}</h2>
             <div class="card mb-3 ps-0 h-50 m-3">
                 <div class="row g-0">
