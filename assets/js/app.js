@@ -8,7 +8,7 @@ const options = {
 
 getPopularMovie();
 
-$(function() {
+$(function () {
     $('#movie-search').click(async (e) => {
         e.preventDefault();
         const searchTerm = $('#movie-keyword').val();
@@ -35,7 +35,7 @@ async function getMovies(keyword, options) {
             $('#enterMovieTitleAlert').modal('show');
             $('#movie-keyword').val('');
         }
-    } catch(err) {
+    } catch (err) {
         console.log("Error with MOVIE search", err);
         $('#errorMovieSearchAlert').modal('show');
     }
@@ -85,13 +85,13 @@ const createCard = (movies) => {
             .text('Viewing Options');
         const cardFooter = $('<div>').addClass('card-footer');
         cardFooter.append(watchBtn)
-        const newCard = $('<div>').addClass('card').css({width: '15rem', height: 'auto'});
+        const newCard = $('<div>').addClass('card').css({ width: '15rem', height: 'auto' });
         newCard.append(poster, cardBody, cardFooter);
         $('#movie-results').append(newCard);
     })
 }
 
-$(document).on('click', '.watchOptionsBtn', function(options) {
+$(document).on('click', '.watchOptionsBtn', function (options) {
     const thisMovieID = $(this).data('movieid');
     getMovieLink(thisMovieID);
 })
@@ -103,7 +103,7 @@ async function searchTyping(keyword) {
         if (res.status === 200) {
             data = await res.json();
             // sort array of object by popularity and trim it to the best 10 elements
-            const sortedArray = data.results.sort((a, b) => b.popularity - a.popularity).slice(0,10);
+            const sortedArray = data.results.sort((a, b) => b.popularity - a.popularity).slice(0, 10);
             // empty the dropdown list
             $('#suggested-list').empty();
             // and append each element of the array
@@ -171,7 +171,7 @@ async function getMovieByID() {
 };
 
 // ----- SEARCH MOVIE BY TYPING EVENT ------ 
-$('#movie-keyword').keyup(function(){
+$('#movie-keyword').keyup(function () {
     $('#movie-keyword').val().trim() ? showDropdown(true) : showDropdown(false);
     const searchField = $('#movie-keyword').val().trim();
     searchTyping(searchField);
@@ -185,7 +185,7 @@ function showDropdown(bool) {
     } else {
         $('#suggested-list').removeAttr('data-bs-popper', 'static').removeClass('show');
         $('#suggested-dropdown').removeClass('show');
-    } 
+    }
 }
 
 // ----- FUNCTION TO FETCH THE WATCH PROVIDERS ------
@@ -201,7 +201,7 @@ async function getMovieLink(id) {
             var newTab = window.open(movieLink, '_blank');
             newTab.focus();
         }
-    } catch(err) {
+    } catch (err) {
         console.log("Error with PROVIDERS search", err);
         $('#notAvailableUKAlert').modal('show');
     }
@@ -245,12 +245,12 @@ async function getFood() {
         if (foodies.length > 0) {
             createFoodCard(foodies);
         } else if (foodies.length === 0) {
-//        $('#enterMovieTitleAlert').modal('show');
-        $('#movie-keyword').val('');
-        } 
-    }   catch(err) {
+            //        $('#enterMovieTitleAlert').modal('show');
+            $('#movie-keyword').val('');
+        }
+    } catch (err) {
         console.log("Error with FOOD search.", err);
-//        $('#errorMovieSearchAlert').modal('show');
+        //        $('#errorMovieSearchAlert').modal('show');
     }
 }
 
@@ -268,7 +268,7 @@ const createFoodCard = (foodies) => {
         const foodImage = foodie.recipe.images.THUMBNAIL.url
         const foodieImage = getFoodImage(foodie.recipe.images.REGULAR.url);
         const recipePage = foodie.recipe.shareAs;
-        
+
         const ingredients = foodie.recipe.ingredientLines;
         console.log(ingredients);
         var ingredientsList = JSON.stringify(ingredients);
@@ -277,61 +277,61 @@ const createFoodCard = (foodies) => {
         var parse = JSON.parse(ingredientsList)
         console.log(parse);
 
-        for (var i = 0; i < ingredients.length; i++)    
-        console.log(ingredients[i]);
-            
+        for (var i = 0; i < ingredients.length; i++)
+            console.log(ingredients[i]);
+
         for (var i = 0; i < ingredients.length; i++) {
-            $("ul li").text(function(index) {
-                return 
-            })    
+            $("ul li").text(function (index) {
+                return
+            })
             page = $('<li>')
                 .text(ingredients[i])
-                .addClass('ingredient');                
-                ul = $('<ul>')
-                .append(page); 
-            }
+                .addClass('ingredient');
+            ul = $('<ul>')
+                .append(page);
+        }
 
-            const foodBtn = $('<button>')
+        const foodBtn = $('<button>')
             .addClass('btn btn-outline-secondary btn-md mx-1 mb-2')
             .attr('type', 'button')
             .attr('data-bs-toggle', 'collapse')
-            .attr('data-bs-spy', 'scroll')            
+            .attr('data-bs-spy', 'scroll')
             .attr('data-bs-target', '#collapseDesc')
             .attr('aria-expanded', 'false')
             .attr('aria-controls', 'collapseDesc')
             .text('Ingredient List');
 
-            // Creates the larger div
-            // create the inner div for the collapsable button with the recipe
-            const foodInnerCard = $('<div>')
-                .addClass('card card-body')
-                .addClass('collapseCard')
-                .append(ul);
-            // create the lower div for recipe and attach the inner div
-            const foodDiv = $('<div>')
-                .addClass('collapse')
-                .attr('id', 'collapseDesc');    
-            foodDiv.append(foodInnerCard);
-            const foodBody = $('<div>')
-                .addClass('card-body')
-                .attr('data-bs-spy', 'scroll')            
-                .attr('data-bs-target', '#collapseCard')
-                .append(foodName, foodBtn, foodDiv);
+        // Creates the larger div
+        // create the inner div for the collapsable button with the recipe
+        const foodInnerCard = $('<div>')
+            .addClass('card card-body')
+            .addClass('collapseCard')
+            .append(ul);
+        // create the lower div for recipe and attach the inner div
+        const foodDiv = $('<div>')
+            .addClass('collapse')
+            .attr('id', 'collapseDesc');
+        foodDiv.append(foodInnerCard);
+        const foodBody = $('<div>')
+            .addClass('card-body')
+            .attr('data-bs-spy', 'scroll')
+            .attr('data-bs-target', '#collapseCard')
+            .append(foodName, foodBtn, foodDiv);
 
-            //Creates footer with Recipe Button
-            const recipeBtn = $('<button>')
-                .addClass('btn btn-primary btn-brand-color foodRecipeBtn')
-                .attr('data-movieID', "text")
-                .text('Recipe');
-            const foodFooter = $('<div>').addClass('card-footer');
-                foodFooter.append(recipeBtn)
+        //Creates footer with Recipe Button
+        const recipeBtn = $('<button>')
+            .addClass('btn btn-primary btn-brand-color foodRecipeBtn')
+            .attr('data-movieID', "text")
+            .text('Recipe');
+        const foodFooter = $('<div>').addClass('card-footer');
+        foodFooter.append(recipeBtn)
 
-            //Combines IMAGE, NAME, BODY, & FOOTER
-            const newFoodCard = $('<div>')
-                .addClass('card')
-                .css({width: '15rem', height: '592px'});
-            newFoodCard.append(foodieImage, foodBody, foodFooter);
-            $('#dinner-options').append(newFoodCard);
+        //Combines IMAGE, NAME, BODY, & FOOTER
+        const newFoodCard = $('<div>')
+            .addClass('card')
+            .css({ width: '15rem', height: '592px' });
+        newFoodCard.append(foodieImage, foodBody, foodFooter);
+        $('#dinner-options').append(newFoodCard);
     })
 }
 
