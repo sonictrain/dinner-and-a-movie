@@ -1,13 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link
-        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css"
-        rel="stylesheet"
-        integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ"
-        crossorigin="anonymous"/>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous" />
     <link rel="stylesheet" href="assets/css/style.css" />
     <title>Dinner and a Movie</title>
 </head>
@@ -24,14 +22,17 @@
                     <div class="col-md-10 col-xl-8">
                         <div class="d-flex">
                             <div class="input-group">
-                                <input type="text" class="form-control" id="movie-keyword" aria-label="Text input with segmented dropdown button" placeholder="Input a Movie or a TV Serie">
+                                <input type="text" class="form-control" id="movie-keyword"
+                                    aria-label="Text input with segmented dropdown button"
+                                    placeholder="Input a Movie or a TV Serie">
                                 <button class="btn btn-primary" type="button" id="movie-search">Search</button>
-                                <button type="button" class="btn btn-primary dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-expanded="false" id="suggested-dropdown">
+                                <button type="button" class="btn btn-primary dropdown-toggle dropdown-toggle-split"
+                                    data-bs-toggle="dropdown" aria-expanded="false" id="suggested-dropdown">
                                     <span class="visually-hidden">Toggle Dropdown</span>
                                 </button>
                                 <ul class="dropdown-menu w-100 dropdown-menu-end" id="suggested-list">
                                 </ul>
-                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -42,76 +43,79 @@
     <main>
         <section class="row returned-data justify-content-around">
             <!-- container to hold move/tv show suggestion -->
-            <div class="col">
+            <div class="col-6">
                 <section id="movie-results" class="row"></section>
+                <section class="row p-3">
+                    <h2>Popular Movies</h2>
+                    <div class="d-flex gap-3 overflow-x-scroll p-3" id="popular-movies" class="row"></div>
+                </section>
             </div>
             <!-- container to hold dinner suggestion -->
-            <div class="col">
+            <div class="col-6">
                 <div class="card col" id="dinner-options" style="width: 18rem;">
                     <img src="..." class="card-img-top" alt="image of suggested meal">
                     <div class="card-body">
-                    <p class="card-text">Dinner ingredients</p>
+                        <p class="card-text">Dinner ingredients</p>
                     </div>
                 </div>
             </div>
         </section>
-    
-    <!-- MODALS -->
-    <!-- #1 empty search -->
-    <div class="modal fade" tabindex="-1" role="dialog" id="enterMovieTitleAlert">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                <h5 class="modal-title">&#x1F3AC; Hello!</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                <p>Please enter a valid movie title or keyword!</p>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                </div>
-            </div>
-        </div>
-    </div>
-    
-    
-    <!-- #2 error with MOVIE SEARCH -->
-    <div class="modal fade" tabindex="-1" role="dialog" id="errorMovieSearchAlert">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                <h5 class="modal-title">&#x1F3A5; Sorry!</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                <p>No movie found. Please try another one!</p>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                </div>
-            </div>
-        </div>
-    </div>
 
-    <!-- #3 NO UK providers or no link -->
-    <div class="modal fade" tabindex="-1" role="dialog" id="notAvailableUKAlert">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                <h5 class="modal-title">&#x1F3A5; Sorry!</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                <p>This movie is not available in the UK or no link found. Please try another one!</p>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <!-- MODALS -->
+        <!-- #1 empty search -->
+        <div class="modal fade" tabindex="-1" role="dialog" id="enterMovieTitleAlert">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">&#x1F3AC; Hello!</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Please enter a valid movie title or keyword!</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
 
+
+        <!-- #2 error with MOVIE SEARCH -->
+        <div class="modal fade" tabindex="-1" role="dialog" id="errorMovieSearchAlert">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">&#x1F3A5; Sorry!</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p>No movie found. Please try another one!</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- #3 NO UK providers or no link -->
+        <div class="modal fade" tabindex="-1" role="dialog" id="notAvailableUKAlert">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">&#x1F3A5; Sorry!</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p>This movie is not available in the UK or no link found. Please try another one!</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
 
     </main>
 
@@ -139,4 +143,5 @@
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script src="assets/js/app.js"></script>
 </body>
+
 </html>
