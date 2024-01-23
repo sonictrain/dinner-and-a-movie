@@ -29,7 +29,7 @@ async function getMovies(keyword, options) {
         const movies = results.data.results;
         // make sure the search returns a valid result
         if (movies.length > 0) {
-            createCard(movies);
+            createMovieCard(movies);
         } else if (movies.length === 0) {
             $('#enterMovieTitleAlert').modal('show');
             $('#movie-keyword').val('');
@@ -41,7 +41,7 @@ async function getMovies(keyword, options) {
 }
 
 // ------ FUNCTION TO CREATE CARDS WITH MOVIES' INFO -------
-const createCard = (movies) => {
+const createMovieCard = (movies) => {
     // clear the search field
     $('#movie-keyword').val('');
     // clear previous results
@@ -246,7 +246,7 @@ const createFoodCard = (foodies) => {
     // clear the search field
     $('#movie-keyword').val('');
     // clear previous results
-    $('#dinner-options').empty();
+    $('#food-results').empty();
     // get fetched data for each food and its ingredients, create a card, add to search results
     $.each(foodies, (i, foodie) => {
         const foodName = $('<h5>')
@@ -279,47 +279,47 @@ const createFoodCard = (foodies) => {
         // console.log(ingredients[i]);
             
 
-            const foodBtn = $('<button>')
-            .addClass('btn btn-outline-secondary btn-md mx-1 mb-2')
-            .attr('type', 'button')
-            .attr('data-bs-toggle', 'collapse')
+        const foodBtn = $('<button>')
+        .addClass('btn btn-outline-secondary btn-md mx-1 mb-2')
+        .attr('type', 'button')
+        .attr('data-bs-toggle', 'collapse')
+        .attr('data-bs-spy', 'scroll')            
+        .attr('data-bs-target', '#collapseDesc')
+        .attr('aria-expanded', 'false')
+        .attr('aria-controls', 'collapseDesc')
+        .text('Ingredient List');
+
+        // Creates the larger div
+        // create the inner div for the collapsable button with the recipe
+        const foodInnerCard = $('<div>')
+            .addClass('card card-body')
+            .addClass('collapseCard')
+            .append(page);
+        // create the lower div for recipe and attach the inner div
+        const foodDiv = $('<div>')
+            .addClass('collapse')
+            .attr('id', 'collapseDesc');    
+        foodDiv.append(foodInnerCard);
+        const foodBody = $('<div>')
+            .addClass('card-body')
             .attr('data-bs-spy', 'scroll')            
-            .attr('data-bs-target', '#collapseDesc')
-            .attr('aria-expanded', 'false')
-            .attr('aria-controls', 'collapseDesc')
-            .text('Ingredient List');
+            .attr('data-bs-target', '#collapseCard')
+            .append(foodName, foodBtn, foodDiv);
 
-            // Creates the larger div
-            // create the inner div for the collapsable button with the recipe
-            const foodInnerCard = $('<div>')
-                .addClass('card card-body')
-                .addClass('collapseCard')
-                .append(page);
-            // create the lower div for recipe and attach the inner div
-            const foodDiv = $('<div>')
-                .addClass('collapse')
-                .attr('id', 'collapseDesc');    
-            foodDiv.append(foodInnerCard);
-            const foodBody = $('<div>')
-                .addClass('card-body')
-                .attr('data-bs-spy', 'scroll')            
-                .attr('data-bs-target', '#collapseCard')
-                .append(foodName, foodBtn, foodDiv);
+        //Creates footer with Recipe Button
+        const recipeBtn = $('<button>')
+            .addClass('btn btn-primary btn-brand-color foodRecipeBtn')
+            .attr('data-recipeUrl', recipeLink)
+            .text('Recipe');
+        const foodFooter = $('<div>').addClass('card-footer');
+            foodFooter.append(recipeBtn)
 
-            //Creates footer with Recipe Button
-            const recipeBtn = $('<button>')
-                .addClass('btn btn-primary btn-brand-color foodRecipeBtn')
-                .attr('data-recipeUrl', recipeLink)
-                .text('Recipe');
-            const foodFooter = $('<div>').addClass('card-footer');
-                foodFooter.append(recipeBtn)
-
-            //Combines IMAGE, NAME, BODY, & FOOTER
-            const newFoodCard = $('<div>')
-                .addClass('card')
-                .css({width: '15rem', height: '592px'});
-            newFoodCard.append(foodieImage, foodBody, foodFooter);
-            $('#food-results').append(newFoodCard);
+        //Combines IMAGE, NAME, BODY, & FOOTER
+        const newFoodCard = $('<div>')
+            .addClass('card')
+            .css({width: '15rem', height: '592px'});
+        newFoodCard.append(foodieImage, foodBody, foodFooter);
+        $('#food-results').append(newFoodCard);
 
             // function thisRecipe() {
             //     console.log(thisButtonRecipe)
@@ -369,7 +369,7 @@ $(document).on('click', '.foodRecipeBtn', function() {
 
 function getFoodImage(link) {
     if (!link) {
-        foodImageUrl = "assets/images/movie-poster-not-found.png";
+        foodImageUrl = "assets/images/food-image-not-found.png";
     } else {
         foodImageUrl = `${link}`;
     }
