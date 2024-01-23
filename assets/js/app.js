@@ -154,6 +154,11 @@ function createPopularCard(posterLink, title, id) {
             </div>`
 };
 
+let USDollar = new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD',
+});
+
 getMovieByID()
 // ----- SEARCH MOVIE BY ID ------
 async function getMovieByID() {
@@ -162,6 +167,8 @@ async function getMovieByID() {
         if (res.status === 200) {
             data = await res.json();
             console.log(data);
+            $('#movie-results').append(createDetailCard(`https://image.tmdb.org/t/p/w500/${data.poster_path}`, data.title, data.release_date, data.tagline, data.overview, USDollar.format(data.revenue), data.vote_average, data.homepage, `https://www.imdb.com/title/${data.imdb_id}/`));
+            $(data.genres).each((i,g) => $('#categories-container').append($('<span>').addClass('badge rounded-pill text-bg-warning').text(g.name)));
         } else {
             console.log(`Error ${res.status}`);
         }
@@ -343,4 +350,41 @@ function getFoodImage(link) {
     }
     const foodPicture = $('<img>').attr('src', foodImageUrl).addClass('card-img-top');
     return foodPicture;
+}
+
+function createDetailCard(posterLink, title, releaseDate, tagLine, description, revenues, vote, officialUrl, imbdURL) {
+    return `<h2>Movie Details</h2>
+            <div class="card mb-3 ps-0 h-50 m-3">
+                <div class="row g-0">
+                    <div class="col-md-4">
+                        <img src="${posterLink}"
+                            class="img-fluid rounded-start" alt="">
+                    </div>
+                    <div class="col-md-8">
+                        <div class="card-body h-100 d-flex flex-column">
+                            <h3 class="card-title">${title}</h3>
+                            <div class="d-flex flex-row gap-2" id="categories-container"></div>
+                            <div>
+                            </div>
+                            <p class="card-text mb-5">
+                                <small class="text-body-secondary">
+                                    Release Date: ${releaseDate}
+                                </small>
+                            </p>
+                            <h5 class="card-title mb-2">${tagLine}
+                            </h5>
+                            <p class="card-text">${description}
+                            </p>
+                            <div>
+                                <p>Revenues <span class="badge rounded-pill text-bg-dark">${revenues}</span></p>
+                                <p>Vote <span class="badge rounded-pill text-bg-dark">${vote}/10</span></p>
+                            </div>
+                            <div class="d-flex flex-row gap-2 w-100 mt-auto">
+                                <a class="col btn btn-primary" href="${officialUrl}" role="button">Official Website</a>
+                                <a class="col btn btn-primary" href="${imbdURL}" role="button">IMDB Website</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>`
 }
