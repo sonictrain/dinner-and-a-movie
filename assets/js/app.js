@@ -361,7 +361,3 @@ function getShareAs(link) {
     return shareAsURL
     console.log(shareAsURL);
 }
-
-
-
-localStorage
