@@ -109,11 +109,13 @@ async function searchTyping(keyword) {
             // and append each element of the array
             $(sortedArray).each((i, o) => {
                 // create list item
-                const listItem = $('<li>').addClass('dropdown-item d-flex gap-2').attr('movie-id', o.id);
+                const listItem = $('<li>').addClass('dropdown-item d-flex gap-2').attr('movie-id', o.id).attr('id', 'search-by-id').on('click', () => {
+                    getMovieByID(o.id);
+                });
                 // add movie title
                 listItem.append($('<p>').addClass('mb-0 me-auto').text(o.title));
                 // add release date in a pill badge
-                listItem.append($('<span>').addClass('badge rounded-pill text-bg-info').text(`Date ${o.release_date}`));
+                listItem.append($('<span>').addClass('badge rounded-pill text-bg-info').text(`Year ${dayjs(o.release_date).format('YYYY')}`));
                 // add popularity score in a pill badge
                 listItem.append($('<span>').addClass('badge rounded-pill text-bg-warning').text(`Popularity ${o.popularity.toFixed()}`));
                 $('#suggested-list').append(listItem);
@@ -149,7 +151,7 @@ function createPopularCard(posterLink, title, id) {
                 <img src="${posterLink}" class="card-img-top object-fit-cover" alt="${title} poster" style="height: 20rem;">
                 <div class="card-body d-flex flex-column justify-content-between">
                     <h5 class="card-title">${title}</h5>
-                    <button type="button" class="btn btn-primary" movie-id="${id}">Learn More</button>
+                    <button type="button" class="btn btn-primary" id="search-by-id" movie-id="${id}">Learn More</button>
                 </div>
             </div>`
 };
@@ -159,11 +161,12 @@ let USDollar = new Intl.NumberFormat('en-US', {
     currency: 'USD',
 });
 
-getMovieByID()
 // ----- SEARCH MOVIE BY ID ------
-async function getMovieByID() {
+async function getMovieByID(id) {
+    $('#movie-results').empty();
+    $('#buttons').empty();''
     try {
-        const res = await fetch(`https://api.themoviedb.org/3/movie/787699?language=en-US`, options);
+        const res = await fetch(`https://api.themoviedb.org/3/movie/${id}?language=en-US`, options);
         if (res.status === 200) {
             data = await res.json();
             console.log(data);
