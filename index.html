@@ -22,9 +22,7 @@
                     <div class="col-md-10 col-xl-8">
                         <div class="d-flex">
                             <div class="input-group">
-                                <input type="text" class="form-control" id="movie-keyword"
-                                    aria-label="Text input with segmented dropdown button"
-                                    placeholder="Input a Movie or a TV Serie">
+                                <input type="text" class="form-control" id="movie-keyword" aria-label="Text input with segmented dropdown button" placeholder="Input a Movie or a TV Series">
                                 <button class="btn btn-primary" type="button" id="movie-search">Search</button>
                                 <button type="button" class="btn btn-primary dropdown-toggle dropdown-toggle-split"
                                     data-bs-toggle="dropdown" aria-expanded="false" id="suggested-dropdown">
@@ -116,17 +114,29 @@
     </main>
 
     <footer>
-        <div class="container sticky-bottom text-center py-0 my-0 mx-auto">
+        <div class="container-fluid d-flex justify-content-center align-items-center py-0 my-0 mx-auto">
             <div id="tmdb-attribution" class="row">
-                <!-- <div class="col-lg-1"> -->
+                <div class="d-inline-flex align-middle align-items-center justify-content-center">
                     <a href="https://developer.themoviedb.org/docs/getting-started" target="_blank">
                         <img src="assets/images/tmdb-logo.png" alt="TMDB logo" id="tmdb-logo">
                     </a>
-                </div>
-                <!-- <div class="col-lg-6 mb-0"> -->
-                    <p>This product uses the TMDB API but is not endorsed or certified by TMDB.</p>
+                    <p class="align-middle mb-0">This product uses the TMDB API but is not endorsed or certified by TMDB.</p>
                 </div>
             </div>
+        </div>
+        <div class="container-fluid d-flex justify-content-center align-items-center py-0 my-0 mx-auto">
+            <div id="edamam-attribution" class="row">
+                <div class="d-inline-flex align-middle align-items-center justify-content-center">
+                    <a href="https://www.edamam.com/" target="_blank">
+                        <img src="./assets/images/Edamam_badge.png" alt="Edamam logo" id="edamam-logo">
+                    </a>
+                    <p class="align-middle mb-0">This product uses the Edamam API but is not endorsed or certified by Edamam.</p>
+                </div>
+            </div>
+        </div>
+        <div>
+            <p id="copyright">&#169 Team Dinner and a Movie 2024
+            </p>
         </div>
     </footer>
 
@@ -138,6 +148,8 @@
     <!-- Axios -->
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script src="assets/js/app.js"></script>
+    <!-- Edemam -->
+    <script src="https://developer.edamam.com/attribution/badge.js"></script>
 </body>
 
 </html>

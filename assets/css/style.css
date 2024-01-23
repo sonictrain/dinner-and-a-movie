@@ -13,17 +13,18 @@
     src: url("../Fonts/CorleoneDue.ttf");
 }
 
+main {
+    flex: 1;
+}
+
 html, body {
     height: 100%;
 }
 
 body {
+    background-color: #610304;
     display: flex;
     flex-direction: column;
-}
-
-main {
-    flex: 1;
 }
 
 /* header */
@@ -67,11 +68,16 @@ h2 {
     padding: 5px;
 }
 
+/*Ask if remove */
+#movie-search { 
+}
+  
 .btn-brand-color {
     background-color: #ffc000;
     border: none;
     color: black;
 }
+
 
 /* body */
 body {
@@ -81,20 +87,28 @@ body {
 #tmdb-logo {
     width: 5rem; 
     height: auto;
-<<<<<<< HEAD
-=======
     margin: 10px;
->>>>>>> 61272df75a53b515230d4f1e9047dde2a7a8a62d
 }
 
 footer {
-    margin-top: auto;
     background-color: #0d253f;
     color: white;
-    height: 5em;
     font-size: 0.75rem;
-<<<<<<< HEAD
+    height: auto;
+    text-align: center;
+    margin-top: 10px;
+    padding: 10px 0px 5px 0px;
 }
-=======
+
+#tmdb-logo {
+    width: 5rem; 
+    height: auto;
+    margin: 5px;
 }
->>>>>>> 61272df75a53b515230d4f1e9047dde2a7a8a62d
+
+#edamam-logo {
+    width: 5rem; 
+    height: auto;
+    margin: 5px;
+}
+
