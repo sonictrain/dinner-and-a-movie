@@ -355,31 +355,8 @@ const createFoodCard = (foodies) => {
                 .css({width: '15rem', height: '592px'});
             newFoodCard.append(foodieImage, foodBody, foodFooter);
             $('#dinner-options').append(newFoodCard);
-
-            // const shareAsURL = $(this).attr('href', recipePage);
-            // console.log(shareAsURL);
-
-            // var a = console.log(recipePage);
-//            const recipeShare = getShareAs(recipePage);
-//          var newFoodTab = window.open(recipePage, '_blank');
-//          newFoodTab.focus();            
     })
 }
-
-        
-// }
-
-// function getShareAs(link) {
-//     if (!link) {
-//         shareAsLink = "Item not found";
-//     } else {
-//         shareAsLink = recipePage;
-//     }
-
-//     const shareAsURL = $(this).attr('href', shareAsLink);
-//     return shareAsURL
-//     console.log(shareAsURL);
-// }
 
 function getFoodImage(link) {
     if (!link) {
