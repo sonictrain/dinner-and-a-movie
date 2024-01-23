@@ -262,21 +262,21 @@ const createFoodCard = (foodies) => {
         // console.log(ingredientsList);
 
         var parse = JSON.parse(ingredientsList)
+        console.log(parse.length);
+            
+            $("ul").text(function(index) {
+                for (var i = 0; i < parse.length; i++) {
+                page = $('<li>')
+                .text(parse)
+                .addClass('ingredient');              
+                }
+            })
+            
         // console.log(parse);
 
-        for (var i = 0; i < ingredients.length; i++)    
+        // for (var i = 0; i < ingredients.length; i++)    
         // console.log(ingredients[i]);
             
-        for (var i = 0; i < ingredients.length; i++) {
-            $("ul li").text(function(index) {
-                return 
-            })    
-            page = $('<li>')
-                .text(ingredients[i])
-                .addClass('ingredient');                
-                ul = $('<ul>')
-                .append(page); 
-            }
 
             const foodBtn = $('<button>')
             .addClass('btn btn-outline-secondary btn-md mx-1 mb-2')
@@ -293,7 +293,7 @@ const createFoodCard = (foodies) => {
             const foodInnerCard = $('<div>')
                 .addClass('card card-body')
                 .addClass('collapseCard')
-                .append(ul);
+                .append(page);
             // create the lower div for recipe and attach the inner div
             const foodDiv = $('<div>')
                 .addClass('collapse')
@@ -319,6 +319,39 @@ const createFoodCard = (foodies) => {
                 .css({width: '15rem', height: '592px'});
             newFoodCard.append(foodieImage, foodBody, foodFooter);
             $('#dinner-options').append(newFoodCard);
+
+            // function thisRecipe() {
+            //     console.log(thisButtonRecipe)
+            // }
+
+            // const foodRoot = "http://www.edamam.com/recipe/";
+            // const myString = recipePage;
+            // const myNewString = myString.replace("http://www.edamam.com/recipe/", "");
+            // console.log(myNewString);
+            // const totalLink = foodRoot + myNewString;
+            // console.log(totalLink);
+            // getFoodLink();
+
+            // $('.foodRecipeBtn').each(function() {
+            //     $(this).on('click', function() {
+            //         getFoodLink();
+            //     })
+            // } 
+//                console.log(thisButtonRecipe);
+            
+
+            // )
+            // const shareAsURL = $(this).attr('href', recipePage);
+            // console.log(shareAsURL);
+            // console.log(recipePage);
+
+            // var a = console.log(recipePage);
+            // const recipeShare = getShareAs(recipePage);
+            // var newFoodTab = window.open(recipePage, '_blank');
+            // newFoodTab.focus();    
+
+
+
     })
 }
 
@@ -342,3 +375,18 @@ function getFoodImage(link) {
     const foodPicture = $('<img>').attr('src', foodImageUrl).addClass('card-img-top');
     return foodPicture;
 }
+
+function getShareAs(link) {
+    if (!link) {
+        shareAsLink = "Item not found";
+    } else {
+        shareAsLink = recipePage;
+    }
+
+    const shareAsURL = $(this).attr('href', shareAsLink);
+    return shareAsURL
+    console.log(shareAsURL);
+}
+
+
+
