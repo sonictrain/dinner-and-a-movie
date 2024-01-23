@@ -6,6 +6,8 @@ const options = {
     }
 }
 
+getPopularMovie();
+
 $(function() {
     $('#movie-search').click(async (e) => {
         e.preventDefault();
@@ -95,7 +97,6 @@ $(document).on('click', '.watchOptionsBtn', function(options) {
 })
 
 // ----- SEARCH MOVIE OR TV SERIE BY TYPING FUNCTION AND UPDATE THE DROPDOWN WITH THE BEST MATCH ------
-// !TODO: SORT BY POPULARITY 
 async function searchTyping(keyword) {
     try {
         const res = await fetch(`https://api.themoviedb.org/3/search/movie?query=${keyword}&include_adult=false&language=en-US&page=1`, options);
@@ -125,6 +126,7 @@ async function searchTyping(keyword) {
     }
 }
 
+// ----- GET POPULAR MOVIES, CREATE MOVIE CARD AND APPEND TO THE RELATED CONTAINER ------ 
 async function getPopularMovie() {
     try {
         const res = await fetch(`https://api.themoviedb.org/3/movie/popular?language=en-US&page=1`, options);
@@ -142,8 +144,7 @@ async function getPopularMovie() {
     }
 };
 
-getPopularMovie();
-
+// ----- CREATE MOVIE CARD FUNCTION ------ 
 function createPopularCard(posterLink, title, id) {
     return `<div class="card col-1" style="width: 18rem; height: 30rem;">
                 <img src="${posterLink}" class="card-img-top object-fit-cover" alt="${title} poster" style="height: 20rem;">
@@ -154,7 +155,22 @@ function createPopularCard(posterLink, title, id) {
             </div>`
 };
 
-// ----- SEARCH MOVIE OR TV SERIE BY TYPING EVENT ------ 
+// ----- SEARCH MOVIE BY ID ------
+async function getPopularMovie() {
+    try {
+        const res = await fetch(`https://api.themoviedb.org/3/movie/787699?language=en-US`, options);
+        if (res.status === 200) {
+            data = await res.json();
+            console.log(data);
+        } else {
+            console.log(`Error ${res.status}`);
+        }
+    } catch (err) {
+        console.log(err);
+    }
+};
+
+// ----- SEARCH MOVIE BY TYPING EVENT ------ 
 $('#movie-keyword').keyup(function(){
     $('#movie-keyword').val().trim() ? showDropdown(true) : showDropdown(false);
     const searchField = $('#movie-keyword').val().trim();
@@ -171,8 +187,6 @@ function showDropdown(bool) {
         $('#suggested-dropdown').removeClass('show');
     } 
 }
-
-
 
 // ----- FUNCTION TO FETCH THE WATCH PROVIDERS ------
 async function getMovieLink(id) {
