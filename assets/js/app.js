@@ -114,7 +114,7 @@ async function searchTyping(keyword) {
                 // add release date in a pill badge
                 listItem.append($('<span>').addClass('badge rounded-pill text-bg-info').text(`Date ${o.release_date}`));
                 // add popularity score in a pill badge
-                listItem.append($('<span>').addClass('badge rounded-pill text-bg-warning').text(`Popularity ${o.popularity}`));
+                listItem.append($('<span>').addClass('badge rounded-pill text-bg-warning').text(`Popularity ${o.popularity.toFixed()}`));
                 $('#suggested-list').append(listItem);
             });
         } else {
@@ -124,6 +124,35 @@ async function searchTyping(keyword) {
         console.log(err);
     }
 }
+
+async function getPopularMovie() {
+    try {
+        const res = await fetch(`https://api.themoviedb.org/3/movie/popular?language=en-US&page=1`, options);
+        if (res.status === 200) {
+            data = await res.json();
+            $(data.results).each((i, o) => {
+                console.log(o.title);
+                $('#popular-movies').append(createPopularCard(`https://image.tmdb.org/t/p/w500/${o.poster_path}`, o.title, o.id));
+            });
+        } else {
+            console.log(`Error ${res.status}`);
+        }
+    } catch (err) {
+        console.log(err);
+    }
+};
+
+getPopularMovie();
+
+function createPopularCard(posterLink, title, id) {
+    return `<div class="card col-1" style="width: 18rem; height: 30rem;">
+                <img src="${posterLink}" class="card-img-top object-fit-cover" alt="${title} poster" style="height: 20rem;">
+                <div class="card-body d-flex flex-column justify-content-between">
+                    <h5 class="card-title">${title}</h5>
+                    <button type="button" class="btn btn-primary" movie-id="${id}">Learn More</button>
+                </div>
+            </div>`
+};
 
 // ----- SEARCH MOVIE OR TV SERIE BY TYPING EVENT ------ 
 $('#movie-keyword').keyup(function(){
@@ -142,6 +171,8 @@ function showDropdown(bool) {
         $('#suggested-dropdown').removeClass('show');
     } 
 }
+
+
 
 // ----- FUNCTION TO FETCH THE WATCH PROVIDERS ------
 async function getMovieLink(id) {
@@ -179,72 +210,6 @@ function getReleaseYear(date) {
     const yearOnly = dateArr[0];
     return yearOnly;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // ----- FUNCTION TO GET FOOD FROM FETCHED
 async function getFood() {
