@@ -167,8 +167,9 @@ async function getMovieByID() {
         if (res.status === 200) {
             data = await res.json();
             console.log(data);
-            $('#movie-results').append(createDetailCard(`https://image.tmdb.org/t/p/w500/${data.poster_path}`, data.title, data.release_date, data.tagline, data.overview, USDollar.format(data.revenue), data.vote_average, data.homepage, `https://www.imdb.com/title/${data.imdb_id}/`));
+            $('#movie-results').append(createDetailCard("Movie Details", `https://image.tmdb.org/t/p/w500/${data.poster_path}`, data.title, data.release_date, data.tagline, data.overview, USDollar.format(data.revenue), data.vote_average, data.homepage, `https://www.imdb.com/title/${data.imdb_id}/`));
             $(data.genres).each((i,g) => $('#categories-container').append($('<span>').addClass('badge rounded-pill text-bg-warning').text(g.name)));
+
         } else {
             console.log(`Error ${res.status}`);
         }
@@ -352,8 +353,8 @@ function getFoodImage(link) {
     return foodPicture;
 }
 
-function createDetailCard(posterLink, title, releaseDate, tagLine, description, revenues, vote, officialUrl, imbdURL) {
-    return `<h2>Movie Details</h2>
+function createDetailCard(sectionTitle, posterLink, title, releaseDate, tagLine, description, revenues, vote, officialUrl, imbdURL) {
+    return `<h2>${sectionTitle}</h2>
             <div class="card mb-3 ps-0 h-50 m-3">
                 <div class="row g-0">
                     <div class="col-md-4">
@@ -379,9 +380,7 @@ function createDetailCard(posterLink, title, releaseDate, tagLine, description, 
                                 <p>Revenues <span class="badge rounded-pill text-bg-dark">${revenues}</span></p>
                                 <p>Vote <span class="badge rounded-pill text-bg-dark">${vote}/10</span></p>
                             </div>
-                            <div class="d-flex flex-row gap-2 w-100 mt-auto">
-                                <a class="col btn btn-primary" href="${officialUrl}" role="button">Official Website</a>
-                                <a class="col btn btn-primary" href="${imbdURL}" role="button">IMDB Website</a>
+                            <div class="d-flex flex-row gap-2 w-100 mt-auto" id="buttons">
                             </div>
                         </div>
                     </div>
