@@ -59,7 +59,7 @@ const createCard = (movies) => {
         const year = getReleaseYear(movie.release_date);
         const releaseDate = $('<p>').text(`Release year: ${year}`);
         const rating = movie.vote_average;
-        if (!movie.vote_average == 0) {
+        if (movie.vote_average !== 0) {
             ratingEl = $('<p>').text(`Rating: ${rating.toFixed(1)}`);
         } else {
             ratingEl = $('<p>').text('N/A');
@@ -74,7 +74,7 @@ const createCard = (movies) => {
             .text('Description');
         // create an html element <p> with the description text
         const description = movie.overview;
-        if (!movie.overview == '') {
+        if (movie.overview !== '') {
             descriptionEl = $('<p>').text(description).addClass('desc')
         } else {
             descriptionEl = $('<p>').text("Description not found.").addClass('desc')
@@ -555,7 +555,7 @@ function displayFavMovies(moviesList) {
             const year = movie.thisMovieYear;
             const releaseDate = $('<p>').text(`Release year: ${year}`);
             const rating = movie.thisMovieRating;
-            if (rating === 0) {
+            if (rating !== 0) {
                 ratingEl = $('<p>').text(`Rating: ${rating.toFixed(1)}`);
             } else {
                 ratingEl = $('<p>').text('N/A');
