@@ -179,7 +179,7 @@ async function getPopularMovie() {
             data = await res.json();
             $(data.results).each((i, o) => {
                 $('#popular-movies').append(
-                    $('<div>').addClass('card col-1 popular-card')
+                    $('<div>').addClass('card col-1 popular-card col-6 col-md-4 col-lg-2')
                     .append(
                         $('<img>')
                             .attr('src', `https://image.tmdb.org/t/p/w500/${o.poster_path}`)

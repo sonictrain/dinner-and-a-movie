@@ -58,7 +58,7 @@ h2 {
 #hero-text {
     color: #fadd87;
     font-family: Pacifico-Regular;
-    font-size: 40px;
+    font-size: 25px;
     margin-top: 20px;
     text-shadow: -2px -2px 0 #000, 2px -2px 0 #000, -2px 2px 0 #000, 2px 2px 0 #000;
 }
@@ -66,10 +66,6 @@ h2 {
 .form-label {
     margin: 50px;
     padding: 5px;
-}
-
-/*Ask if remove */
-#movie-search { 
 }
   
 .btn-brand-color {
@@ -110,11 +106,6 @@ footer {
     width: 5rem; 
     height: auto;
     margin: 5px;
-}
-
-.popular-card {
-    width: 18rem;
-    height: 30rem;
 }
 
 .popular-card img {

@@ -18,12 +18,12 @@
         <div class="jumbotron py-5 px-3">
             <div class="jumbotron-container  text-center">
                 <p id="hero-text">Plan your perfect evening with...</p>
-                <h1 class="display-8">Dinner and a Movie</h1>
+                <h1 class="display-3">Dinner and a Movie</h1>
                 <!-- select form for dinner and movie choice -->
                 <div class="row justify-content-center d-flex">
                     <!-- input group for MOVIE & FOOD Search  -->
-                    <div class="col-md-10 col-lg-8 col-xl-7">
-                        <div class="d-flex">
+                    <div class="col-sm-12 col-md-10">
+                        <div class="d-flex flex-column flex-md-row gap-3">
                             <div class="input-group">
                                 <input type="text" class="form-control" id="movie-keyword" aria-label="Text input with segmented dropdown button" placeholder="Input a Movie or a TV Series">
                                 <button class="btn btn-primary" type="button" id="movie-search">Search</button>
@@ -34,10 +34,10 @@
                                 <ul class="dropdown-menu w-100 dropdown-menu-end" id="suggested-list">
                                 </ul>
                             </div>
+                            <div class="col-sm col-md-3 col-lg-3 col-xl-2">
+                                <button class="btn btn-primary btn-brand-color w-100" id="my-favourites"><i class="fa-regular fa-star"></i> My Favourites</button>
+                            </div>
                         </div>
-                    </div>
-                    <div class="col-md-2 col-xl-2">
-                        <button class="btn btn-primary btn-brand-color" id="my-favourites"><i class="fa-regular fa-star"></i> My Favourites</button>
                     </div>
                 </div>
             </div>
