@@ -25,7 +25,7 @@
                     <div class="col-sm-12 col-md-10">
                         <div class="d-flex flex-column flex-md-row gap-3">
                             <div class="input-group">
-                                <input type="text" class="form-control" id="movie-keyword" aria-label="Text input with segmented dropdown button" placeholder="Input a Movie or a TV Series">
+                                <input type="text" class="form-control" id="movie-keyword" aria-label="Text input with segmented dropdown button" placeholder="Input a Movie Title">
                                 <button class="btn btn-primary" type="button" id="movie-search">Search</button>
                                 <button type="button" class="btn btn-primary dropdown-toggle dropdown-toggle-split"
                                     data-bs-toggle="dropdown" aria-expanded="false" id="suggested-dropdown">
@@ -47,9 +47,13 @@
     <main>
         <section class="returned-data justify-content-around">
             <!-- container to hold move/tv show suggestion -->
-            <section id="movie-results" class="d-flex gap-3 overflow-x-scroll p-3 d-none"></section>
+            <section id="movie-carousel" class="p-3 d-none">
+                <div class="d-flex gap-3 overflow-x-scroll p-3" id="movie-results"></div>
+            </section>
             <!-- container to hold dinner suggestion -->
-            <section id="food-results" class="d-flex gap-3 overflow-x-scroll p-3 d-none"></section>
+            <section id="food-carousel" class="p-3 d-none">
+                <div class="d-flex gap-3 overflow-x-scroll p-3" id="food-results"></div>
+            </section>
             <!-- container to show popular movies at the start -->
             <section id="popular-carousel" class="p-3">
                 <h2>Popular Movies</h2>
