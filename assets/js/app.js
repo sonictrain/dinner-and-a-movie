@@ -364,3 +364,4 @@ function getShareAs(link) {
 
 
 
+localStorage
