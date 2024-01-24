@@ -10,6 +10,7 @@ $(function() {
     $('#movie-search').click(async (e) => {
         e.preventDefault();
         const searchTerm = $('#movie-keyword').val();
+        $('#popular-carousel').hide();
         if (searchTerm === '') {
             $('#enterMovieTitleAlert').modal('show');
         } else {
@@ -318,7 +319,7 @@ const createFoodCard = (foodies) => {
                 .addClass('card')
                 .css({width: '15rem', height: '592px'});
             newFoodCard.append(foodieImage, foodBody, foodFooter);
-            $('#dinner-options').append(newFoodCard);
+            $('#food-results').append(newFoodCard);
 
     })
 }
