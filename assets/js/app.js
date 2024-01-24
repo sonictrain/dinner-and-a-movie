@@ -320,38 +320,6 @@ const createFoodCard = (foodies) => {
             newFoodCard.append(foodieImage, foodBody, foodFooter);
             $('#dinner-options').append(newFoodCard);
 
-            // function thisRecipe() {
-            //     console.log(thisButtonRecipe)
-            // }
-
-            // const foodRoot = "http://www.edamam.com/recipe/";
-            // const myString = recipePage;
-            // const myNewString = myString.replace("http://www.edamam.com/recipe/", "");
-            // console.log(myNewString);
-            // const totalLink = foodRoot + myNewString;
-            // console.log(totalLink);
-            // getFoodLink();
-
-            // $('.foodRecipeBtn').each(function() {
-            //     $(this).on('click', function() {
-            //         getFoodLink();
-            //     })
-            // } 
-//                console.log(thisButtonRecipe);
-            
-
-            // )
-            // const shareAsURL = $(this).attr('href', recipePage);
-            // console.log(shareAsURL);
-            // console.log(recipePage);
-
-            // var a = console.log(recipePage);
-            // const recipeShare = getShareAs(recipePage);
-            // var newFoodTab = window.open(recipePage, '_blank');
-            // newFoodTab.focus();    
-
-
-
     })
 }
 
