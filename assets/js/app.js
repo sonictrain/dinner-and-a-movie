@@ -130,6 +130,7 @@ function addMovieToFavs(id, title, year, rating, desc) {
         const newMovie = {thisMovieID, thisMovieTitle, thisMovieYear, thisMovieRating, thisMovieDesc};
         favMoviesList.push(newMovie);
         localStorage.setItem('savedMoviesList', JSON.stringify(favMoviesList));
+        $('#addedToFavAlert').modal('show');
     })
 }
 
