@@ -1,3 +1,14 @@
+// code to initialize tooltips
+const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
+const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl));
+// jQuery equivalent
+// const $tooltipTriggerList = $('[data-bs-toggle="tooltip"]');
+// $tooltipTriggerList.each(function () {
+//   $(this).tooltip();
+// });
+
+
+
 const options = {
     method: 'GET',
     headers: {
@@ -5,6 +16,8 @@ const options = {
         Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIwZGVlNGY1NTQ0ZDA5NGYxZmYyZWE2MWU3YzlkMGFjYSIsInN1YiI6IjY1YTk5MzQxYzRhZDU5MDBjYjk2NTE2OCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.62LSjglzjwChTtYhCfgruCqPBs1Dfk1mGoEi-pqkV6A'
     }
 }
+
+
 
 $(function() {
     $('#movie-search').click(async (e) => {
@@ -82,8 +95,17 @@ const createCard = (movies) => {
             .addClass('btn btn-primary btn-brand-color watchOptionsBtn')
             .attr('data-movieID', movieID)
             .text('Viewing Options');
-        const cardFooter = $('<div>').addClass('card-footer');
-        cardFooter.append(watchBtn)
+        const starBtn = $('<button>')
+            .addClass('btn btn-outline-primary btn-sm movie-favs')
+            .html('<i class="fa-regular fa-star">')
+            .attr('data-movieID', movieID)
+            .attr('data-title', title) 
+            .attr('type', 'button')
+            .attr('data-bs-toggle', 'tooltip')
+            .attr('data-bs-placement', 'bottom')
+            .attr('data-bs-title', 'Add to my favourites.');
+        const cardFooter = $('<div>').addClass('card-footer d-flex justify-content-between');
+        cardFooter.append(watchBtn, starBtn);
         const newCard = $('<div>').addClass('card').css({width: '15rem', height: 'auto'});
         newCard.append(poster, cardBody, cardFooter);
         $('#movie-results').append(newCard);
@@ -246,7 +268,7 @@ const createFoodCard = (foodies) => {
     // clear the search field
     $('#movie-keyword').val('');
     // clear previous results
-    $('#dinner-options').empty();
+    $('#food-results').empty();
     // get fetched data for each food and its ingredients, create a card, add to search results
     $.each(foodies, (i, foodie) => {
         const foodName = $('<h5>')
@@ -316,8 +338,15 @@ const createFoodCard = (foodies) => {
                 .addClass('btn btn-primary btn-brand-color foodRecipeBtn')
                 .attr('data-recipeUrl', recipeLink)
                 .text('Recipe');
-            const foodFooter = $('<div>').addClass('card-footer');
-                foodFooter.append(recipeBtn)
+            const starBtn = $('<button>')
+                .addClass('btn btn-outline-primary btn-sm food-favs')
+                .html('<i class="fa-regular fa-star">')
+                .attr('type', 'button')
+                .attr('data-bs-toggle', 'tooltip')
+                .attr('data-bs-placement', 'bottom')
+                .attr('data-bs-title', 'Add to my favourites.');
+            const foodFooter = $('<div>').addClass('card-footer d-flex justify-content-between');
+                foodFooter.append(recipeBtn, starBtn)
 
             //Combines IMAGE, NAME, BODY, & FOOTER
             const newFoodCard = $('<div>')
