@@ -30,7 +30,6 @@ $(function() {
             getMovies(searchTerm, options);
             getFood(searchTerm);
         }
-        // $('[data-bs-toggle="tooltip"]').tooltip();
     })
 })
 
@@ -391,3 +390,4 @@ function getFoodImage(link) {
     const foodPicture = $('<img>').attr('src', foodImageUrl).addClass('card-img-top');
     return foodPicture;
 }
+
