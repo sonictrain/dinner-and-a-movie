@@ -13,6 +13,7 @@ const options = {
 
 
 $(function() {
+    getPopularMovie();
     $('#movie-search').click(async (e) => {
         e.preventDefault();
         const searchTerm = $('#movie-keyword').val();
@@ -119,7 +120,7 @@ const createCard = (movies) => {
     })
 }
 
-// ---- EVENT LISTENER ON STAR BUTTON IN MOVIE CARDS ------
+// ---- Event listener on STAR button in MOVIE cards ------
 function addMovieToFavs(id, title, year, rating, desc) {
     $(document).off('click', '#movie-results .movie-favs').on('click', '#movie-results .movie-favs', function(e) {
         e.preventDefault();
@@ -191,8 +192,6 @@ async function getPopularMovie() {
     }
 };
 
-getPopularMovie();
-
 function createPopularCard(posterLink, title, id) {
     return `<div class="card col-1" style="width: 18rem; height: 30rem;">
                 <img src="${posterLink}" class="card-img-top object-fit-cover" alt="${title} poster" style="height: 20rem;">
@@ -221,8 +220,6 @@ function showDropdown(bool) {
     } 
 }
 
-
-
 // ----- FUNCTION TO FETCH THE WATCH PROVIDERS ------
 async function getMovieLink(id) {
     try {
@@ -242,7 +239,7 @@ async function getMovieLink(id) {
     }
 }
 
-// ---- AUXILIARY FUNCTION TO GET POSTER IMAGE --- 
+// ---- Auxiliary function to get POSTER IMAGE --- 
 function getImage(path) {
     if (!path) {
         imageUrl = "assets/images/movie-poster-not-found.png";
@@ -262,14 +259,11 @@ function getReleaseYear(date) {
 
 // ----- FUNCTION TO GET FOOD FROM FETCHED
 async function getFood() {
-
     const recipeRoot = "https://api.edamam.com/api/recipes/v2?type=public&q=";
     const APIid = "10153ee1";
     const APIKey = "027bd5bbabe6fabd88736c41b30ffe19";
     const searchTerm = $('#movie-keyword').val();
     const foodURL = recipeRoot + searchTerm + "&app_id=" + APIid + "&app_key=" + APIKey;
-
-
     try {
         const results = await axios.get(foodURL);
         const foodies = results.data.hits;
@@ -297,16 +291,17 @@ const createFoodCard = (foodies) => {
     $('#food-results').empty();
     // get fetched data for each food and its ingredients, create a card, add to search results
     $.each(foodies, (i, foodie) => {
-        const foodName = $('<h5>')
-            .text(foodie.recipe.label)
+        const foodName = foodie.recipe.label;
+        const foodNameEl = $('<h5>')
+            .text(foodName)
             .addClass('card-title');
         // cuisine type
         const typeUnformatted = foodie.recipe.cuisineType[0];
-        const typeFormatted = typeUnformatted.toLowerCase().replace(/\b[a-z]/g, function(txtVal) {
+        const cuisineType = typeUnformatted.toLowerCase().replace(/\b[a-z]/g, function(txtVal) {
             return txtVal.toUpperCase();
         });
-        const foodCuisine = $('<p>')
-            .text("Cuisine: " + typeFormatted);
+        const cuisineEl = $('<p>')
+            .text("Cuisine: " + cuisineType);
         // dietary precautions
         const allergens = foodie.recipe.cautions;
         if (allergens.length === 0) {
@@ -316,31 +311,25 @@ const createFoodCard = (foodies) => {
         }
         const foodPrecautions = $('<p>')
             .text("Dietary Precautions: " + cautions);
-        // food image
+        // ! is this used anywhere?
         const foodImage = foodie.recipe.images.THUMBNAIL.url
-        const foodieImage = getFoodImage(foodie.recipe.images.REGULAR.url);
+        // food image
+        const imageUrl = foodie.recipe.images.REGULAR.url;
+        const foodieImage = getFoodImage(imageUrl);
         const recipeLink = foodie.recipe.url;
         const ingredients = foodie.recipe.ingredientLines;
         // console.log(ingredients);
         var ingredientsList = JSON.stringify(ingredients);
         // console.log(ingredientsList);
-
-        var parse = JSON.parse(ingredientsList);
+        var parseIngredients = JSON.parse(ingredientsList);
         // console.log(parse.length);    
         $("ul").text(function(index) {
-            for (var i = 0; i < parse.length; i++) {
+            for (var i = 0; i < parseIngredients.length; i++) {
             page = $('<li>')
-            .text(parse)
+            .text(parseIngredients)
             .addClass('ingredient');              
             }
         })
-            
-        // console.log(parse);
-
-        // for (var i = 0; i < ingredients.length; i++)    
-        // console.log(ingredients[i]);
-            
-
         const foodBtn = $('<button>')
             .addClass('btn btn-outline-secondary btn-md mx-1 mb-2')
             .attr('type', 'button')
@@ -365,8 +354,8 @@ const createFoodCard = (foodies) => {
             .addClass('card-body')
             .attr('data-bs-spy', 'scroll')            
             .attr('data-bs-target', '#collapseCard')
-            .append(foodName, foodCuisine, foodPrecautions, foodBtn, foodDiv);
-
+            // ! change here
+            .append(foodNameEl, cuisineEl, foodPrecautions, foodBtn, foodDiv);
         //Creates footer with Recipe Button
         const recipeBtn = $('<button>')
             .addClass('btn btn-primary btn-brand-color foodRecipeBtn')
@@ -375,6 +364,12 @@ const createFoodCard = (foodies) => {
         const starBtn = $('<button>')
             .addClass('btn btn-outline-primary btn-sm food-favs')
             .html('<i class="fa-regular fa-star">')
+            .attr('data-name', foodName)
+            .attr('data-imageUrl', imageUrl)
+            .attr('data-cuisine', cuisineType)
+            .attr('data-allergens', cautions)
+            .attr('data-ingredients', parseIngredients)
+            .attr('data-recipeLink', recipeLink)
             .attr('type', 'button')
             .attr('data-bs-toggle', 'tooltip')
             .attr('data-bs-placement', 'bottom')
@@ -383,14 +378,32 @@ const createFoodCard = (foodies) => {
         $('[data-bs-toggle="tooltip"]').tooltip();
         const foodFooter = $('<div>').addClass('card-footer d-flex justify-content-between');
             foodFooter.append(recipeBtn, starBtn)
-
         //Combines IMAGE, NAME, BODY, & FOOTER
         const newFoodCard = $('<div>')
             .addClass('card')
             .css({width: '15rem',});
         newFoodCard.append(foodieImage, foodBody, foodFooter);
         $('#food-results').append(newFoodCard);
+        /// add event listener on the star button
+    })
+    addFoodToFavs();
+}
 
+// ---- Event listener on STAR button in FOOD cards ------
+function addFoodToFavs() {
+    $(document).off('click', '#food-results .food-favs').on('click', '#food-results .food-favs', function(e) {
+        e.preventDefault();
+        const favFoodsList = JSON.parse(localStorage.getItem('savedFoodsList')) || [];
+        const thisFoodName = $(this).data('name');
+        const thisFoodImgUrl = $(this).data('imageurl');
+        const thisFoodCuisine = $(this).data('cuisine');
+        const thisFoodAllergens = $(this).data('allergens');
+        const thisFoodIngredients = $(this).data('ingredients');
+        const thisFoodRecipeUrl = $(this).data('recipelink');
+        const newFood = {thisFoodName, thisFoodImgUrl, thisFoodCuisine, thisFoodAllergens, thisFoodIngredients, thisFoodRecipeUrl};
+        favFoodsList.push(newFood);
+        localStorage.setItem('savedFoodsList', JSON.stringify(favFoodsList));
+        $('#addedToFavAlert').modal('show');
     })
 }
 
@@ -406,6 +419,7 @@ $(document).on('click', '.foodRecipeBtn', function() {
     }
 })
 
+// ---- Auxiliary function to get FOOD IMAGE ---
 function getFoodImage(link) {
     if (!link) {
         foodImageUrl = "assets/images/movie-poster-not-found.png";
@@ -439,7 +453,6 @@ function displayFavMovies(moviesList) {
             const movieID = movie.thisMovieID;
             const posterPath = movie.thisMoviePosterPath;
             const poster = getImage(posterPath);
-
             const title = movie.thisMovieTitle;
             const titleEl = $('<h5>').text(title).addClass('card-title');
             const year = movie.thisMovieYear;
@@ -478,8 +491,6 @@ function displayFavMovies(moviesList) {
             cardFooter.append(watchBtn);
             const newCard = $('<div>').addClass('card').css({width: '15rem', height: 'auto'});
             newCard.append(poster, cardBody, cardFooter);
-            // newCard.append(cardBody, cardFooter);
             $('#movie-results').append(newCard);
         })
-    // console.log(favMoviesList);
 }
