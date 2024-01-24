@@ -354,7 +354,6 @@ const createFoodCard = (foodies) => {
             .addClass('card-body')
             .attr('data-bs-spy', 'scroll')            
             .attr('data-bs-target', '#collapseCard')
-            // ! change here
             .append(foodNameEl, cuisineEl, foodPrecautions, foodBtn, foodDiv);
         //Creates footer with Recipe Button
         const recipeBtn = $('<button>')
@@ -377,7 +376,7 @@ const createFoodCard = (foodies) => {
         // initialize the tooltip
         $('[data-bs-toggle="tooltip"]').tooltip();
         const foodFooter = $('<div>').addClass('card-footer d-flex justify-content-between');
-            foodFooter.append(recipeBtn, starBtn)
+        foodFooter.append(recipeBtn, starBtn)
         //Combines IMAGE, NAME, BODY, & FOOTER
         const newFoodCard = $('<div>')
             .addClass('card')
@@ -436,13 +435,15 @@ function getFavourites() {
         e.preventDefault();
         // pull out movies from local storage
         const favMoviesList = JSON.parse(localStorage.getItem('savedMoviesList'));
-        if (!favMoviesList) {
+        const favFoodsList = JSON.parse(localStorage.getItem('savedFoodsList'));
+        if (!favMoviesList && !favFoodsList) {
             $('#noSavedFavAlert').modal('show');
         } else {
             $('#popular-carousel').hide();
             $('#movie-results').empty();
             $('#food-results').empty();
             displayFavMovies(favMoviesList);
+            displayFavFoods(favFoodsList);
         }
     })
 }
@@ -493,4 +494,69 @@ function displayFavMovies(moviesList) {
             newCard.append(poster, cardBody, cardFooter);
             $('#movie-results').append(newCard);
         })
+}
+
+// ---- FUNCTION TO DISPLAY FOODS FROM LOCAL STORAGE----
+function displayFavFoods(foodList) {
+    $.each(foodList, (i, food) => {
+        const foodName = food.thisFoodName;
+        const foodNameEl = $('<h5>')
+            .text(foodName)
+            .addClass('card-title');
+        const cuisineType = food.thisFoodCuisine;
+        const cuisineEl = $('<p>')
+            .text("Cuisine: " + cuisineType);
+        const allergens = food.thisFoodAllergens;
+        const foodPrecautions = $('<p>')
+            .text("Dietary Precautions: " + allergens);
+        const imageUrl = food.thisFoodImgUrl;
+        const foodieImage = getFoodImage(imageUrl);
+        const recipeLink = food.thisFoodRecipeUrl;
+        const ingredients = food.thisFoodIngredients;
+        $("ul").text(function(index) {
+            for (var i = 0; i < ingredients.length; i++) {
+            page = $('<li>')
+            .text(ingredients)
+            .addClass('ingredient');              
+            }
+        })
+        const foodBtn = $('<button>')
+            .addClass('btn btn-outline-secondary btn-md mx-1 mb-2')
+            .attr('type', 'button')
+            .attr('data-bs-toggle', 'collapse')
+            .attr('data-bs-spy', 'scroll')            
+            .attr('data-bs-target', '#collapseDesc')
+            .attr('aria-expanded', 'false')
+            .attr('aria-controls', 'collapseDesc')
+            .text('Ingredient List');
+        // Creates the larger div
+        // create the inner div for the collapsable button with the recipe
+        const foodInnerCard = $('<div>')
+            .addClass('card card-body')
+            .addClass('collapseCard')
+            .append(page);
+        // create the lower div for recipe and attach the inner div
+        const foodDiv = $('<div>')
+            .addClass('collapse')
+            .attr('id', 'collapseDesc');    
+        foodDiv.append(foodInnerCard);
+        const foodBody = $('<div>')
+            .addClass('card-body')
+            .attr('data-bs-spy', 'scroll')            
+            .attr('data-bs-target', '#collapseCard')
+            .append(foodNameEl, cuisineEl, foodPrecautions, foodBtn, foodDiv);
+        //Creates footer with Recipe Button
+        const recipeBtn = $('<button>')
+            .addClass('btn btn-primary btn-brand-color foodRecipeBtn')
+            .attr('data-recipeUrl', recipeLink)
+            .text('Recipe');
+        const foodFooter = $('<div>').addClass('card-footer d-flex justify-content-between');
+        foodFooter.append(recipeBtn)
+        //Combines IMAGE, NAME, BODY, & FOOTER
+        const newFoodCard = $('<div>')
+            .addClass('card')
+            .css({width: '15rem',});
+        newFoodCard.append(foodieImage, foodBody, foodFooter);
+        $('#food-results').append(newFoodCard);
+    })
 }
