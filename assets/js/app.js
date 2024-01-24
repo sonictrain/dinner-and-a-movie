@@ -252,6 +252,11 @@ const createFoodCard = (foodies) => {
         const foodName = $('<h5>')
             .text(foodie.recipe.label)
             .addClass('card-title');
+        const foodCuisine = $('<p>')
+            .text("Cuisine Type: " + foodie.recipe.cuisineType);
+
+        const foodPrecautions = $('<p>')
+            .text("Dietary Precautions: " + foodie.recipe.cautions);
         const foodImage = foodie.recipe.images.THUMBNAIL.url
         const foodieImage = getFoodImage(foodie.recipe.images.REGULAR.url);
         const recipePage = foodie.recipe.shareAs;
@@ -304,7 +309,7 @@ const createFoodCard = (foodies) => {
                 .addClass('card-body')
                 .attr('data-bs-spy', 'scroll')            
                 .attr('data-bs-target', '#collapseCard')
-                .append(foodName, foodBtn, foodDiv);
+                .append(foodName, foodCuisine, foodPrecautions, foodBtn, foodDiv);
 
             //Creates footer with Recipe Button
             const recipeBtn = $('<button>')
