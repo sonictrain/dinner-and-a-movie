@@ -1,12 +1,6 @@
-// TODO: enable tooltips
 // TODO: when food star is clicked, add to local storage 'savedMovieList' (save all card info in an object)
 // TODO: when movie star is clicked, add to local storage 'savedFoodList'(save all card info in an object)
 // TODO: when 'My Favourites' button is clicked, pull out 2 lists from local storage, clear current display, and show the cards instead
-
-
-
-
-
 
 const options = {
     method: 'GET',
@@ -63,13 +57,15 @@ const createCard = (movies) => {
     $.each(movies, (i, movie) => {
         const movieID = movie.id;
         const poster = getImage(movie.poster_path);
-        const title = $('<h5>').text(movie.title).addClass('card-title');
+        const title = movie.title;
+        const titleEl = $('<h5>').text(title).addClass('card-title');
         const year = getReleaseYear(movie.release_date);
         const releaseDate = $('<p>').text(`Release year: ${year}`);
+        const rating = movie.vote_average;
         if (!movie.vote_average == 0) {
-            rating = $('<p>').text(`Rating: ${movie.vote_average.toFixed(1)}`);
+            ratingEl = $('<p>').text(`Rating: ${rating.toFixed(1)}`);
         } else {
-            rating = $('<p>').text('N/A');
+            ratingEl = $('<p>').text('N/A');
         };
         const desBtn = $('<button>')
             .addClass('btn btn-outline-secondary btn-md mx-1 mb-2')
@@ -80,26 +76,31 @@ const createCard = (movies) => {
             .attr('aria-controls', 'collapseDesc')
             .text('Description');
         // create an html element <p> with the description text
+        const description = movie.overview;
         if (!movie.overview == '') {
-            description = $('<p>').text(movie.overview).addClass('desc')
+            descriptionEl = $('<p>').text(description).addClass('desc')
         } else {
-            description = $('<p>').text("Description not found.").addClass('desc')
+            descriptionEl = $('<p>').text("Description not found.").addClass('desc')
         }
         // create the inner div for the collapsable button with the description
-        const descInnerCard = $('<div>').addClass('card card-body').append(description);
+        const descInnerCard = $('<div>').addClass('card card-body').append(descriptionEl);
         // create the lower div for description and attach the inner div
         const descDiv = $('<div>').addClass('collapse').attr('id', 'collapseDesc');
         descDiv.append(descInnerCard);
-        const cardBody = $('<div>').addClass('card-body').append(title, releaseDate, rating, desBtn, descDiv);
+        const cardBody = $('<div>').addClass('card-body').append(titleEl, releaseDate, ratingEl, desBtn, descDiv);
         const watchBtn = $('<button>')
             .addClass('btn btn-primary btn-brand-color watchOptionsBtn')
             .attr('data-movieID', movieID)
             .text('Viewing Options');
-            const starBtn = $('<button>')
+        // star button to add movie to Favourites
+        const starBtn = $('<button>')
             .addClass('btn btn-outline-primary btn-sm movie-favs')
             .html('<i class="fa-regular fa-star">')
             .attr('data-movieID', movieID)
-            .attr('data-title', title) 
+            .attr('data-title', title)
+            .attr('data-year', year)
+            .attr('data-rating', rating)
+            .attr('data-desc', description)
             .attr('type', 'button')
             .attr('data-bs-toggle', 'tooltip')
             .attr('data-bs-placement', 'bottom')
@@ -111,9 +112,28 @@ const createCard = (movies) => {
         const newCard = $('<div>').addClass('card').css({width: '15rem', height: 'auto'});
         newCard.append(poster, cardBody, cardFooter);
         $('#movie-results').append(newCard);
+        // add event listener on the star button
+        addMovieToFavs();
     })
 }
 
+// ---- EVENT LISTENER ON STAR BUTTON IN MOVIE CARDS ------
+function addMovieToFavs(id, title, year, rating, desc) {
+    $(document).off('click', '#movie-results .movie-favs').on('click', '#movie-results .movie-favs', function(e) {
+        e.preventDefault();
+        const favMoviesList = JSON.parse(localStorage.getItem('savedMoviesList')) || [];
+        const thisMovieID = $(this).data('movieid');
+        const thisMovieTitle = $(this).data('title');
+        const thisMovieYear = $(this).data('year');
+        const thisMovieRating = $(this).data('rating');
+        const thisMovieDesc = $(this).data('desc');
+        const newMovie = {thisMovieID, thisMovieTitle, thisMovieYear, thisMovieRating, thisMovieDesc};
+        favMoviesList.push(newMovie);
+        localStorage.setItem('savedMoviesList', JSON.stringify(favMoviesList));
+    })
+}
+
+// ---- FUNCTION TO FETCH MOVIE LINK -----
 $(document).on('click', '.watchOptionsBtn', function(options) {
     const thisMovieID = $(this).data('movieid');
     getMovieLink(thisMovieID);
@@ -391,3 +411,4 @@ function getFoodImage(link) {
     const foodPicture = $('<img>').attr('src', foodImageUrl).addClass('card-img-top');
     return foodPicture;
 }
+
