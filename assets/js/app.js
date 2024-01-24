@@ -24,7 +24,7 @@ $(function() {
             getMovies(searchTerm, options);
             getFood(searchTerm);
         }
-        // $('[data-bs-toggle="tooltip"]').tooltip();
+        getFavourites();
     })
 })
 
@@ -413,3 +413,17 @@ function getFoodImage(link) {
     return foodPicture;
 }
 
+// ---- EVENT LISTENER ON THE 'MY FAVOURITES' BUTTON ----
+function getFavourites() {
+    $('#my-favourites').click(function(e) {
+        e.preventDefault();
+        $('#movie-results').empty();
+        $('#food-results').empty();
+        displayFavMovies();
+    })
+}
+
+displayFavMovies() {
+    const favMoviesList = JSON.parse(localStorage.getItem('savedMoviesList'));
+    console.log(favMoviesList);
+}
