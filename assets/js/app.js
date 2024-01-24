@@ -135,7 +135,33 @@ async function getPopularMovie() {
         if (res.status === 200) {
             data = await res.json();
             $(data.results).each((i, o) => {
-                $('#popular-movies').append(createPopularCard(`https://image.tmdb.org/t/p/w500/${o.poster_path}`, o.title, o.id));
+                $('#popular-movies').append(
+                    $('<div>').addClass('card col-1 popular-card')
+                    .append(
+                        $('<img>')
+                            .attr('src', `https://image.tmdb.org/t/p/w500/${o.poster_path}`)
+                            .addClass('card-img-top object-fit-cover')
+                            .attr('alt', `${o.title} poster`)
+                    ).append(
+                        $('<div>')
+                        .addClass('card-body d-flex flex-column justify-content-between')
+                        .append(
+                            $('<h5>')
+                            .addClass('card-title')
+                            .text(`${o.title}`)
+                        ).append(
+                            $('<button>')
+                            .addClass('btn btn-primary')
+                            .attr('id', 'search-by-id')
+                            .attr('movie-id', `${o.id}`)
+                            .text('Read More')
+                            .attr('role', 'button')
+                            .on('click', () => {
+                                getMovieByID(o.id)
+                            })
+                        )
+                    )
+                )
             });
         } else {
             console.log(`Error ${res.status}`);
@@ -143,17 +169,6 @@ async function getPopularMovie() {
     } catch (err) {
         console.log(err);
     }
-};
-
-// ----- CREATE MOVIE CARD FUNCTION ------ 
-function createPopularCard(posterLink, title, id) {
-    return `<div class="card col-1" style="width: 18rem; height: 30rem;">
-                <img src="${posterLink}" class="card-img-top object-fit-cover" alt="${title} poster" style="height: 20rem;">
-                <div class="card-body d-flex flex-column justify-content-between">
-                    <h5 class="card-title">${title}</h5>
-                    <button type="button" class="btn btn-primary" id="search-by-id" movie-id="${id}">Learn More</button>
-                </div>
-            </div>`
 };
 
 let USDollar = new Intl.NumberFormat('en-US', {
