@@ -16,9 +16,9 @@ const options = {
     }
 }
 
+getPopularMovie();
 
-
-$(function() {
+$(function () {
     $('#movie-search').click(async (e) => {
         e.preventDefault();
         const searchTerm = $('#movie-keyword').val();
@@ -47,7 +47,7 @@ async function getMovies(keyword, options) {
             $('#enterMovieTitleAlert').modal('show');
             $('#movie-keyword').val('');
         }
-    } catch(err) {
+    } catch (err) {
         console.log("Error with MOVIE search", err);
         $('#errorMovieSearchAlert').modal('show');
     }
@@ -114,30 +114,31 @@ const createCard = (movies) => {
     })
 }
 
-$(document).on('click', '.watchOptionsBtn', function(options) {
+$(document).on('click', '.watchOptionsBtn', function (options) {
     const thisMovieID = $(this).data('movieid');
     getMovieLink(thisMovieID);
 })
 
 // ----- SEARCH MOVIE OR TV SERIE BY TYPING FUNCTION AND UPDATE THE DROPDOWN WITH THE BEST MATCH ------
-// !TODO: SORT BY POPULARITY 
 async function searchTyping(keyword) {
     try {
         const res = await fetch(`https://api.themoviedb.org/3/search/movie?query=${keyword}&include_adult=false&language=en-US&page=1`, options);
         if (res.status === 200) {
             data = await res.json();
             // sort array of object by popularity and trim it to the best 10 elements
-            const sortedArray = data.results.sort((a, b) => b.popularity - a.popularity).slice(0,10);
+            const sortedArray = data.results.sort((a, b) => b.popularity - a.popularity).slice(0, 10);
             // empty the dropdown list
             $('#suggested-list').empty();
             // and append each element of the array
             $(sortedArray).each((i, o) => {
                 // create list item
-                const listItem = $('<li>').addClass('dropdown-item d-flex gap-2').attr('movie-id', o.id);
+                const listItem = $('<li>').addClass('dropdown-item d-flex gap-2').attr('movie-id', o.id).attr('id', 'search-by-id').on('click', () => {
+                    getMovieByID(o.id);
+                });
                 // add movie title
                 listItem.append($('<p>').addClass('mb-0 me-auto').text(o.title));
                 // add release date in a pill badge
-                listItem.append($('<span>').addClass('badge rounded-pill text-bg-info').text(`Date ${o.release_date}`));
+                listItem.append($('<span>').addClass('badge rounded-pill text-bg-info').text(`Year ${dayjs(o.release_date).format('YYYY')}`));
                 // add popularity score in a pill badge
                 listItem.append($('<span>').addClass('badge rounded-pill text-bg-warning').text(`Popularity ${o.popularity.toFixed()}`));
                 $('#suggested-list').append(listItem);
@@ -150,14 +151,40 @@ async function searchTyping(keyword) {
     }
 }
 
+// ----- GET POPULAR MOVIES, CREATE MOVIE CARD AND APPEND TO THE RELATED CONTAINER ------ 
 async function getPopularMovie() {
     try {
         const res = await fetch(`https://api.themoviedb.org/3/movie/popular?language=en-US&page=1`, options);
         if (res.status === 200) {
             data = await res.json();
             $(data.results).each((i, o) => {
-                // console.log(o.title);
-                $('#popular-movies').append(createPopularCard(`https://image.tmdb.org/t/p/w500/${o.poster_path}`, o.title, o.id));
+                $('#popular-movies').append(
+                    $('<div>').addClass('card col-1 popular-card')
+                    .append(
+                        $('<img>')
+                            .attr('src', `https://image.tmdb.org/t/p/w500/${o.poster_path}`)
+                            .addClass('card-img-top object-fit-cover')
+                            .attr('alt', `${o.title} poster`)
+                    ).append(
+                        $('<div>')
+                        .addClass('card-body d-flex flex-column justify-content-between')
+                        .append(
+                            $('<h5>')
+                            .addClass('card-title')
+                            .text(`${o.title}`)
+                        ).append(
+                            $('<button>')
+                            .addClass('btn btn-primary')
+                            .attr('id', 'search-by-id')
+                            .attr('movie-id', `${o.id}`)
+                            .text('Read More')
+                            .attr('role', 'button')
+                            .on('click', () => {
+                                getMovieByID(o.id)
+                            })
+                        )
+                    )
+                )
             });
         } else {
             console.log(`Error ${res.status}`);
@@ -167,20 +194,34 @@ async function getPopularMovie() {
     }
 };
 
-getPopularMovie();
+let USDollar = new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD',
+});
 
-function createPopularCard(posterLink, title, id) {
-    return `<div class="card col-1" style="width: 18rem; height: 30rem;">
-                <img src="${posterLink}" class="card-img-top object-fit-cover" alt="${title} poster" style="height: 20rem;">
-                <div class="card-body d-flex flex-column justify-content-between">
-                    <h5 class="card-title">${title}</h5>
-                    <button type="button" class="btn btn-primary" movie-id="${id}">Learn More</button>
-                </div>
-            </div>`
+// ----- SEARCH MOVIE BY ID ------
+async function getMovieByID(id) {
+    $('#movie-results').empty();
+    $('#buttons').empty();''
+    try {
+        const res = await fetch(`https://api.themoviedb.org/3/movie/${id}?language=en-US`, options);
+        if (res.status === 200) {
+            data = await res.json();
+            console.log(data);
+            $('#movie-results').append(createDetailCard("Movie Details", `https://image.tmdb.org/t/p/w500/${data.poster_path}`, data.title, data.release_date, data.tagline, data.overview, USDollar.format(data.revenue), data.vote_average, data.homepage, `https://www.imdb.com/title/${data.imdb_id}/`));
+            $(data.genres).each((i,g) => $('#categories-container').append($('<span>').addClass('badge rounded-pill text-bg-warning').text(g.name)));
+            $('#buttons').append($('<a>').addClass('col btn btn-primary').attr('href', data.homepage).text('Official Website'))
+                         .append($('<a>').addClass('col btn btn-primary').attr('href', `https://www.imdb.com/title/${data.imdb_id}/`).text('IMDB Website'));
+        } else {
+            console.log(`Error ${res.status}`);
+        }
+    } catch (err) {
+        console.log(err);
+    }
 };
 
-// ----- SEARCH MOVIE OR TV SERIE BY TYPING EVENT ------ 
-$('#movie-keyword').keyup(function(){
+// ----- SEARCH MOVIE BY TYPING EVENT ------ 
+$('#movie-keyword').keyup(function () {
     $('#movie-keyword').val().trim() ? showDropdown(true) : showDropdown(false);
     const searchField = $('#movie-keyword').val().trim();
     searchTyping(searchField);
@@ -194,10 +235,8 @@ function showDropdown(bool) {
     } else {
         $('#suggested-list').removeAttr('data-bs-popper', 'static').removeClass('show');
         $('#suggested-dropdown').removeClass('show');
-    } 
+    }
 }
-
-
 
 // ----- FUNCTION TO FETCH THE WATCH PROVIDERS ------
 async function getMovieLink(id) {
@@ -212,7 +251,7 @@ async function getMovieLink(id) {
             var newTab = window.open(movieLink, '_blank');
             newTab.focus();
         }
-    } catch(err) {
+    } catch (err) {
         console.log("Error with PROVIDERS search", err);
         $('#notAvailableUKAlert').modal('show');
     }
@@ -256,12 +295,12 @@ async function getFood() {
         if (foodies.length > 0) {
             createFoodCard(foodies);
         } else if (foodies.length === 0) {
-//        $('#enterMovieTitleAlert').modal('show');
-        $('#movie-keyword').val('');
-        } 
-    }   catch(err) {
+            //        $('#enterMovieTitleAlert').modal('show');
+            $('#movie-keyword').val('');
+        }
+    } catch (err) {
         console.log("Error with FOOD search.", err);
-//        $('#errorMovieSearchAlert').modal('show');
+        //        $('#errorMovieSearchAlert').modal('show');
     }
 }
 
@@ -321,7 +360,7 @@ const createFoodCard = (foodies) => {
             .addClass('btn btn-outline-secondary btn-md mx-1 mb-2')
             .attr('type', 'button')
             .attr('data-bs-toggle', 'collapse')
-            .attr('data-bs-spy', 'scroll')            
+            .attr('data-bs-spy', 'scroll')
             .attr('data-bs-target', '#collapseDesc')
             .attr('aria-expanded', 'false')
             .attr('aria-controls', 'collapseDesc')
@@ -390,4 +429,39 @@ function getFoodImage(link) {
     }
     const foodPicture = $('<img>').attr('src', foodImageUrl).addClass('card-img-top');
     return foodPicture;
+}
+
+function createDetailCard(sectionTitle, posterLink, title, releaseDate, tagLine, description, revenues, vote) {
+    return `<h2>${sectionTitle}</h2>
+            <div class="card mb-3 ps-0 h-50 m-3">
+                <div class="row g-0">
+                    <div class="col-md-4">
+                        <img src="${posterLink}"
+                            class="img-fluid rounded-start" alt="">
+                    </div>
+                    <div class="col-md-8">
+                        <div class="card-body h-100 d-flex flex-column">
+                            <h3 class="card-title">${title}</h3>
+                            <div class="d-flex flex-row gap-2" id="categories-container"></div>
+                            <div>
+                            </div>
+                            <p class="card-text mb-5">
+                                <small class="text-body-secondary">
+                                    Release Date: ${releaseDate}
+                                </small>
+                            </p>
+                            <h5 class="card-title mb-2">${tagLine}
+                            </h5>
+                            <p class="card-text">${description}
+                            </p>
+                            <div>
+                                <p>Revenues <span class="badge rounded-pill text-bg-dark">${revenues}</span></p>
+                                <p>Vote <span class="badge rounded-pill text-bg-dark">${vote}/10</span></p>
+                            </div>
+                            <div class="d-flex flex-row gap-2 w-100 mt-auto" id="buttons">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>`
 }
