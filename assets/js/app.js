@@ -24,8 +24,8 @@ $(function() {
             getMovies(searchTerm, options);
             getFood(searchTerm);
         }
-        getFavourites();
     })
+    getFavourites();
 })
 
 // ---- FUNCTION TO GET MOVIES FROM FETCHED DATA
@@ -56,7 +56,8 @@ const createCard = (movies) => {
     // get fetched data for each movie, create a card, add to search results
     $.each(movies, (i, movie) => {
         const movieID = movie.id;
-        const poster = getImage(movie.poster_path);
+        const posterPath = movie.poster_path;
+        const poster = getImage(posterPath);
         const title = movie.title;
         const titleEl = $('<h5>').text(title).addClass('card-title');
         const year = getReleaseYear(movie.release_date);
@@ -97,6 +98,7 @@ const createCard = (movies) => {
             .addClass('btn btn-outline-primary btn-sm movie-favs')
             .html('<i class="fa-regular fa-star">')
             .attr('data-movieID', movieID)
+            .attr('data-posterPath', posterPath)
             .attr('data-title', title)
             .attr('data-year', year)
             .attr('data-rating', rating)
@@ -123,11 +125,12 @@ function addMovieToFavs(id, title, year, rating, desc) {
         e.preventDefault();
         const favMoviesList = JSON.parse(localStorage.getItem('savedMoviesList')) || [];
         const thisMovieID = $(this).data('movieid');
+        const thisMoviePosterPath = $(this).data('posterpath')
         const thisMovieTitle = $(this).data('title');
         const thisMovieYear = $(this).data('year');
         const thisMovieRating = $(this).data('rating');
         const thisMovieDesc = $(this).data('desc');
-        const newMovie = {thisMovieID, thisMovieTitle, thisMovieYear, thisMovieRating, thisMovieDesc};
+        const newMovie = {thisMovieID, thisMoviePosterPath, thisMovieTitle, thisMovieYear, thisMovieRating, thisMovieDesc};
         favMoviesList.push(newMovie);
         localStorage.setItem('savedMoviesList', JSON.stringify(favMoviesList));
         $('#addedToFavAlert').modal('show');
@@ -417,13 +420,66 @@ function getFoodImage(link) {
 function getFavourites() {
     $('#my-favourites').click(function(e) {
         e.preventDefault();
-        $('#movie-results').empty();
-        $('#food-results').empty();
-        displayFavMovies();
+        // pull out movies from local storage
+        const favMoviesList = JSON.parse(localStorage.getItem('savedMoviesList'));
+        if (!favMoviesList) {
+            $('#noSavedFavAlert').modal('show');
+        } else {
+            $('#popular-carousel').hide();
+            $('#movie-results').empty();
+            $('#food-results').empty();
+            displayFavMovies(favMoviesList);
+        }
     })
 }
 
-displayFavMovies() {
-    const favMoviesList = JSON.parse(localStorage.getItem('savedMoviesList'));
-    console.log(favMoviesList);
+// ---- FUNCTION TO DISPLAY MOVIES FROM LOCAL STORAGE----
+function displayFavMovies(moviesList) {
+        $.each(moviesList, (i, movie) =>  {
+            const movieID = movie.thisMovieID;
+            const posterPath = movie.thisMoviePosterPath;
+            const poster = getImage(posterPath);
+
+            const title = movie.thisMovieTitle;
+            const titleEl = $('<h5>').text(title).addClass('card-title');
+            const year = movie.thisMovieYear;
+            const releaseDate = $('<p>').text(`Release year: ${year}`);
+            const rating = movie.thisMovieRating;
+            if (rating === 0) {
+                ratingEl = $('<p>').text(`Rating: ${rating.toFixed(1)}`);
+            } else {
+                ratingEl = $('<p>').text('N/A');
+            }
+            const description = movie.thisMovieDesc;
+            if (!description == '') {
+                descriptionEl = $('<p>').text(description).addClass('desc')
+            } else {
+                descriptionEl = $('<p>').text("Description not found.").addClass('desc')
+            }
+            const desBtn = $('<button>')
+                .addClass('btn btn-outline-secondary btn-md mx-1 mb-2')
+                .attr('type', 'button')
+                .attr('data-bs-toggle', 'collapse')
+                .attr('data-bs-target', '#collapseDesc')
+                .attr('aria-expanded', 'false')
+                .attr('aria-controls', 'collapseDesc')
+                .text('Description');
+            // create the inner div for the collapsable button with the description
+            const descInnerCard = $('<div>').addClass('card card-body').append(descriptionEl);
+            // create the lower div for description and attach the inner div
+            const descDiv = $('<div>').addClass('collapse').attr('id', 'collapseDesc');
+            descDiv.append(descInnerCard);
+            const cardBody = $('<div>').addClass('card-body').append(titleEl, releaseDate, ratingEl, desBtn, descDiv);
+            const watchBtn = $('<button>')
+                .addClass('btn btn-primary btn-brand-color watchOptionsBtn')
+                .attr('data-movieID', movieID)
+                .text('Viewing Options');
+            const cardFooter = $('<div>').addClass('card-footer d-flex justify-content-between');
+            cardFooter.append(watchBtn);
+            const newCard = $('<div>').addClass('card').css({width: '15rem', height: 'auto'});
+            newCard.append(poster, cardBody, cardFooter);
+            // newCard.append(cardBody, cardFooter);
+            $('#movie-results').append(newCard);
+        })
+    // console.log(favMoviesList);
 }

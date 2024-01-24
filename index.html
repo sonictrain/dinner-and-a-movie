@@ -37,7 +37,7 @@
                         </div>
                     </div>
                     <div class="col-md-2 col-xl-2">
-                        <button class="btn btn-primary btn-brand-color"><i class="fa-regular fa-star"></i> My Favourites</button>
+                        <button class="btn btn-primary btn-brand-color" id="my-favourites"><i class="fa-regular fa-star"></i> My Favourites</button>
                     </div>
                 </div>
             </div>
@@ -127,6 +127,25 @@
                     </div>
                     <div class="modal-body">
                         <p>This item is added to your Favourites!</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- #5 Favourties is empty -->
+        <div class="modal fade" tabindex="-1" role="dialog" id="noSavedFavAlert">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">&#x1F497; Great choice!</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Your Favourites list is empty.</p>
+                        <p>Explore our movies and food options and find what you like!</p>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
