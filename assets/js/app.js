@@ -325,7 +325,7 @@ const createFoodCard = (foodies) => {
                 .css({width: '15rem', height: '592px'});
             newFoodCard.append(foodieImage, foodBody, foodFooter);
             $('#food-results').append(newFoodCard);
-
+ 
     })
 }
 
