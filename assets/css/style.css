@@ -91,3 +91,12 @@ footer {
     height: 5em;
     font-size: 0.75rem;
 }
+
+.popular-card {
+    width: 18rem;
+    height: 30rem;
+}
+
+.popular-card img {
+    height: 20rem;
+}
