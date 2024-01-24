@@ -74,6 +74,9 @@ h2 {
     color: black;
 }
 
+.popular-card img {
+    height: 24rem;
+}
 
 /* body */
 body {
@@ -108,10 +111,7 @@ footer {
     margin: 5px;
 }
 
-.popular-card img {
-    height: 20rem;
-}
-
+/* media-queries */
 @media (min-width: 768px) {
     #hero-text {
         font-size: 30px;
