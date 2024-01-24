@@ -4,6 +4,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <!-- Bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous" />
     <link rel="stylesheet" href="assets/css/style.css" />
@@ -17,14 +20,12 @@
                 <p id="hero-text">Plan your perfect evening with...</p>
                 <h1 class="display-8">Dinner and a Movie</h1>
                 <!-- select form for dinner and movie choice -->
-                <div class="row justify-content-around">
+                <div class="row justify-content-center d-flex">
                     <!-- input group for MOVIE & FOOD Search  -->
-                    <div class="col-md-10 col-xl-8">
+                    <div class="col-md-10 col-lg-8 col-xl-7">
                         <div class="d-flex">
                             <div class="input-group">
-                                <input type="text" class="form-control" id="movie-keyword"
-                                    aria-label="Text input with segmented dropdown button"
-                                    placeholder="Input a Movie or a TV Serie">
+                                <input type="text" class="form-control" id="movie-keyword" aria-label="Text input with segmented dropdown button" placeholder="Input a Movie or a TV Series">
                                 <button class="btn btn-primary" type="button" id="movie-search">Search</button>
                                 <button type="button" class="btn btn-primary dropdown-toggle dropdown-toggle-split"
                                     data-bs-toggle="dropdown" aria-expanded="false" id="suggested-dropdown">
@@ -35,6 +36,9 @@
                             </div>
                         </div>
                     </div>
+                    <div class="col-md-2 col-xl-2">
+                        <button class="btn btn-primary btn-brand-color"><i class="fa-regular fa-star"></i> My Favourites</button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -42,6 +46,11 @@
     <!-- section to display returned data -->
     <main>
         <section class="row returned-data justify-content-around">
+            <!-- container to show popular movies at the start -->
+            <section class="row p-3" id="popular-carousel">
+                <h2>Popular Movies</h2>
+                <div class="d-flex gap-3 overflow-x-scroll p-3" id="popular-movies" class="row"></div>
+            </section>
             <!-- container to hold move/tv show suggestion -->
             <div class="col-6">
                 <section id="movie-results" class="row p-3">
@@ -55,6 +64,11 @@
             <div class="col-6">
                 <div class="card col" id="dinner-options" style="width: 18rem;">
                 </div>
+                <section id="movie-results" class="row"></section>
+            </div>
+            <!-- container to hold dinner suggestion -->
+            <div class="col-6">
+                <section id="food-results" class="row"></section>
             </div>
         </section>
 
@@ -116,17 +130,38 @@
     </main>
 
     <footer>
-        <div class="container sticky-bottom text-center py-0 my-0 mx-auto">
+        <div class="container-fluid d-flex justify-content-center align-items-center py-0 my-0 mx-auto">
             <div id="tmdb-attribution" class="row">
                 <!-- <div class="col-lg-1"> -->
                 <a href="https://developer.themoviedb.org/docs/getting-started" target="_blank">
                     <img src="assets/images/tmdb-logo.png" alt="TMDB logo" id="tmdb-logo">
                 </a>
+
+                <div class="d-inline-flex align-middle align-items-center justify-content-center">
+                    <a href="https://developer.themoviedb.org/docs/getting-started" target="_blank">
+                        <img src="assets/images/tmdb-logo.png" alt="TMDB logo" id="tmdb-logo">
+                    </a>
+                    <p class="align-middle mb-0">This product uses the TMDB API but is not endorsed or certified by TMDB.</p>
+                </div>
+            </div>
+        </div>
+        <div class="container-fluid d-flex justify-content-center align-items-center py-0 my-0 mx-auto">
+            <div id="edamam-attribution" class="row">
+                <div class="d-inline-flex align-middle align-items-center justify-content-center">
+                    <a href="https://www.edamam.com/" target="_blank">
+                        <img src="./assets/images/Edamam_badge.png" alt="Edamam logo" id="edamam-logo">
+                    </a>
+                    <p class="align-middle mb-0">This product uses the Edamam API but is not endorsed or certified by Edamam.</p>
+                </div>
             </div>
             <!-- <div class="col-lg-6 mb-0"> -->
             <p>This product uses the TMDB API but is not endorsed or certified by TMDB.</p>
         </div>
         </div>
+        </div>
+        <div>
+            <p id="copyright">&#169 Team Dinner and a Movie 2024
+            </p>
         </div>
     </footer>
 
@@ -134,11 +169,15 @@
     <script src="https://cdn.jsdelivr.net/npm/dayjs@1/dayjs.min.js"></script>
     <!-- jQuery -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <!-- Popper js-->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
     <!-- Include Bootstrap JavaScript -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
     <!-- Axios -->
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <!-- custom js -->
+    <!-- Edemam -->
+    <script src="https://developer.edamam.com/attribution/badge.js"></script>
     <script src="assets/js/app.js"></script>
 </body>
 

@@ -1,3 +1,13 @@
+// TODO: enable tooltips
+// TODO: when food star is clicked, add to local storage 'savedMovieList' (save all card info in an object)
+// TODO: when movie star is clicked, add to local storage 'savedFoodList'(save all card info in an object)
+// TODO: when 'My Favourites' button is clicked, pull out 2 lists from local storage, clear current display, and show the cards instead
+
+
+
+
+
+
 const options = {
     method: 'GET',
     headers: {
@@ -6,12 +16,14 @@ const options = {
     }
 }
 
+
 getPopularMovie();
 
-$(function () {
+$(function() {
     $('#movie-search').click(async (e) => {
         e.preventDefault();
         const searchTerm = $('#movie-keyword').val();
+        $('#popular-carousel').hide();
         if (searchTerm === '') {
             $('#enterMovieTitleAlert').modal('show');
         } else {
@@ -19,6 +31,7 @@ $(function () {
             getMovies(searchTerm, options);
             getFood(searchTerm);
         }
+        // $('[data-bs-toggle="tooltip"]').tooltip();
     })
 })
 
@@ -86,6 +99,20 @@ const createCard = (movies) => {
         const cardFooter = $('<div>').addClass('card-footer');
         cardFooter.append(watchBtn)
         const newCard = $('<div>').addClass('card').css({ width: '15rem', height: 'auto' });
+        const starBtn = $('<button>')
+            .addClass('btn btn-outline-primary btn-sm movie-favs')
+            .html('<i class="fa-regular fa-star">')
+            .attr('data-movieID', movieID)
+            .attr('data-title', title) 
+            .attr('type', 'button')
+            .attr('data-bs-toggle', 'tooltip')
+            .attr('data-bs-placement', 'bottom')
+            .attr('data-bs-title', 'Add to my favourites');
+        // initialize the tooltip
+        $('[data-bs-toggle="tooltip"]').tooltip();
+        const cardFooter = $('<div>').addClass('card-footer d-flex justify-content-between');
+        cardFooter.append(watchBtn, starBtn);
+        const newCard = $('<div>').addClass('card').css({width: '15rem', height: 'auto'});
         newCard.append(poster, cardBody, cardFooter);
         $('#movie-results').append(newCard);
     })
@@ -162,6 +189,9 @@ async function getPopularMovie() {
                         )
                     )
                 )
+
+                // console.log(o.title);
+                $('#popular-movies').append(createPopularCard(`https://image.tmdb.org/t/p/w500/${o.poster_path}`, o.title, o.id));
             });
         } else {
             console.log(`Error ${res.status}`);
@@ -265,9 +295,9 @@ async function getFood() {
     try {
         const results = await axios.get(foodURL);
         const foodies = results.data.hits;
-
-        console.log(foodies);
-        console.log(foodies.length)
+        // console.log(foodURL);
+        // console.log(foodies);
+        // console.log(foodies.length)
         // make sure the search returns a valid result
         if (foodies.length > 0) {
             createFoodCard(foodies);
@@ -286,24 +316,37 @@ const createFoodCard = (foodies) => {
     // clear the search field
     $('#movie-keyword').val('');
     // clear previous results
-    $('#dinner-options').empty();
+    $('#food-results').empty();
     // get fetched data for each food and its ingredients, create a card, add to search results
     $.each(foodies, (i, foodie) => {
         const foodName = $('<h5>')
             .text(foodie.recipe.label)
             .addClass('card-title');
+        // cuisine type
+        const typeUnformatted = foodie.recipe.cuisineType[0];
+        const typeFormatted = typeUnformatted.toLowerCase().replace(/\b[a-z]/g, function(txtVal) {
+            return txtVal.toUpperCase();
+        });
+        const foodCuisine = $('<p>')
+            .text("Cuisine: " + typeFormatted);
+        // dietary precautions
+        const allergens = foodie.recipe.cautions;
+        if (allergens.length === 0) {
+            var cautions = "N/A"
+        } else {
+            cautions = allergens;
+        }
+        const foodPrecautions = $('<p>')
+            .text("Dietary Precautions: " + cautions);
+        // food image
         const foodImage = foodie.recipe.images.THUMBNAIL.url
         const foodieImage = getFoodImage(foodie.recipe.images.REGULAR.url);
         const recipePage = foodie.recipe.shareAs;
-
+        const recipeLink = foodie.recipe.url;
         const ingredients = foodie.recipe.ingredientLines;
-        console.log(ingredients);
+        // console.log(ingredients);
         var ingredientsList = JSON.stringify(ingredients);
-        console.log(ingredientsList);
-
-        var parse = JSON.parse(ingredientsList)
-        console.log(parse);
-
+        // console.log(ingredientsList);
         for (var i = 0; i < ingredients.length; i++)
             console.log(ingredients[i]);
 
@@ -317,6 +360,21 @@ const createFoodCard = (foodies) => {
             ul = $('<ul>')
                 .append(page);
         }
+        var parse = JSON.parse(ingredientsList);
+        // console.log(parse.length);    
+        $("ul").text(function(index) {
+            for (var i = 0; i < parse.length; i++) {
+            page = $('<li>')
+            .text(parse)
+            .addClass('ingredient');              
+            }
+        })
+            
+        // console.log(parse);
+
+        // for (var i = 0; i < ingredients.length; i++)    
+        // console.log(ingredients[i]);
+           
 
         const foodBtn = $('<button>')
             .addClass('btn btn-outline-secondary btn-md mx-1 mb-2')
@@ -327,6 +385,46 @@ const createFoodCard = (foodies) => {
             .attr('aria-expanded', 'false')
             .attr('aria-controls', 'collapseDesc')
             .text('Ingredient List');
+        // Creates the larger div
+        // create the inner div for the collapsable button with the recipe
+        const foodInnerCard = $('<div>')
+            .addClass('card card-body')
+            .addClass('collapseCard')
+            .append(page);
+        // create the lower div for recipe and attach the inner div
+        const foodDiv = $('<div>')
+            .addClass('collapse')
+            .attr('id', 'collapseDesc');    
+        foodDiv.append(foodInnerCard);
+        const foodBody = $('<div>')
+            .addClass('card-body')
+            .attr('data-bs-spy', 'scroll')            
+            .attr('data-bs-target', '#collapseCard')
+            .append(foodName, foodCuisine, foodPrecautions, foodBtn, foodDiv);
+
+        //Creates footer with Recipe Button
+        const recipeBtn = $('<button>')
+            .addClass('btn btn-primary btn-brand-color foodRecipeBtn')
+            .attr('data-recipeUrl', recipeLink)
+            .text('Recipe');
+        const starBtn = $('<button>')
+            .addClass('btn btn-outline-primary btn-sm food-favs')
+            .html('<i class="fa-regular fa-star">')
+            .attr('type', 'button')
+            .attr('data-bs-toggle', 'tooltip')
+            .attr('data-bs-placement', 'bottom')
+            .attr('data-bs-title', 'Add to my favourites');
+        // initialize the tooltip
+        $('[data-bs-toggle="tooltip"]').tooltip();
+        const foodFooter = $('<div>').addClass('card-footer d-flex justify-content-between');
+            foodFooter.append(recipeBtn, starBtn)
+
+        //Combines IMAGE, NAME, BODY, & FOOTER
+        const newFoodCard = $('<div>')
+            .addClass('card')
+            .css({width: '15rem',});
+        newFoodCard.append(foodieImage, foodBody, foodFooter);
+        $('#food-results').append(newFoodCard);
 
         // Creates the larger div
         // create the inner div for the collapsable button with the recipe
@@ -359,8 +457,21 @@ const createFoodCard = (foodies) => {
             .css({ width: '15rem', height: '592px' });
         newFoodCard.append(foodieImage, foodBody, foodFooter);
         $('#dinner-options').append(newFoodCard);
+
     })
 }
+
+// ---- Open the recipe in a new tab -------
+$(document).on('click', '.foodRecipeBtn', function() {
+    const recipeUrl = $(this).data('recipeurl');
+    if (recipeUrl != '') {
+        // TODO: replace with a modal
+        var newTab = window.open(recipeUrl, '_blank');
+        newTab.focus();
+    } else {
+        $('#noRecipeLinkAlert').modal('show');
+    }
+})
 
 function getFoodImage(link) {
     if (!link) {
@@ -371,6 +482,7 @@ function getFoodImage(link) {
     const foodPicture = $('<img>').attr('src', foodImageUrl).addClass('card-img-top');
     return foodPicture;
 }
+
 
 function createDetailCard(sectionTitle, posterLink, title, releaseDate, tagLine, description, revenues, vote) {
     return `<h2>${sectionTitle}</h2>
@@ -406,3 +518,4 @@ function createDetailCard(sectionTitle, posterLink, title, releaseDate, tagLine,
                 </div>
             </div>`
 }
+
