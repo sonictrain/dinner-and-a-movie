@@ -18,7 +18,7 @@
         <div class="jumbotron py-5 px-3">
             <div class="jumbotron-container  text-center">
                 <p id="hero-text">Plan your perfect evening with...</p>
-                <h1 class="display-3">Dinner and a Movie</h1>
+                <h1>Dinner and a Movie</h1>
                 <!-- select form for dinner and movie choice -->
                 <div class="row justify-content-center d-flex">
                     <!-- input group for MOVIE & FOOD Search  -->
@@ -45,20 +45,16 @@
     </header>
     <!-- section to display returned data -->
     <main>
-        <section class="row returned-data justify-content-around">
-            <!-- container to show popular movies at the start -->
-            <section class="row p-3" id="popular-carousel">
-                <h2>Popular Movies</h2>
-                <div class="d-flex gap-3 overflow-x-scroll p-3" id="popular-movies" class="row"></div>
-            </section>
+        <section class="returned-data justify-content-around">
             <!-- container to hold move/tv show suggestion -->
-            <div class="col-6">
-                <section id="movie-results" class="row"></section>
-            </div>
+            <section id="movie-results" class="d-flex gap-3 overflow-x-scroll p-3 d-none"></section>
             <!-- container to hold dinner suggestion -->
-            <div class="col-6">
-                <section id="food-results" class="row"></section>
-            </div>
+            <section id="food-results" class="d-flex gap-3 overflow-x-scroll p-3 d-none"></section>
+            <!-- container to show popular movies at the start -->
+            <section id="popular-carousel" class="p-3">
+                <h2>Popular Movies</h2>
+                <div class="d-flex gap-3 overflow-x-scroll p-3" id="popular-movies"></div>
+            </section>
         </section>
 
         <!-- MODALS -->
