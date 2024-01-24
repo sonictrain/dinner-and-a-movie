@@ -114,7 +114,7 @@ async function searchTyping(keyword) {
                 // add release date in a pill badge
                 listItem.append($('<span>').addClass('badge rounded-pill text-bg-info').text(`Date ${o.release_date}`));
                 // add popularity score in a pill badge
-                listItem.append($('<span>').addClass('badge rounded-pill text-bg-warning').text(`Popularity ${o.popularity}`));
+                listItem.append($('<span>').addClass('badge rounded-pill text-bg-warning').text(`Popularity ${o.popularity.toFixed()}`));
                 $('#suggested-list').append(listItem);
             });
         } else {
@@ -124,6 +124,35 @@ async function searchTyping(keyword) {
         console.log(err);
     }
 }
+
+async function getPopularMovie() {
+    try {
+        const res = await fetch(`https://api.themoviedb.org/3/movie/popular?language=en-US&page=1`, options);
+        if (res.status === 200) {
+            data = await res.json();
+            $(data.results).each((i, o) => {
+                console.log(o.title);
+                $('#popular-movies').append(createPopularCard(`https://image.tmdb.org/t/p/w500/${o.poster_path}`, o.title, o.id));
+            });
+        } else {
+            console.log(`Error ${res.status}`);
+        }
+    } catch (err) {
+        console.log(err);
+    }
+};
+
+getPopularMovie();
+
+function createPopularCard(posterLink, title, id) {
+    return `<div class="card col-1" style="width: 18rem; height: 30rem;">
+                <img src="${posterLink}" class="card-img-top object-fit-cover" alt="${title} poster" style="height: 20rem;">
+                <div class="card-body d-flex flex-column justify-content-between">
+                    <h5 class="card-title">${title}</h5>
+                    <button type="button" class="btn btn-primary" movie-id="${id}">Learn More</button>
+                </div>
+            </div>`
+};
 
 // ----- SEARCH MOVIE OR TV SERIE BY TYPING EVENT ------ 
 $('#movie-keyword').keyup(function(){
@@ -142,6 +171,8 @@ function showDropdown(bool) {
         $('#suggested-dropdown').removeClass('show');
     } 
 }
+
+
 
 // ----- FUNCTION TO FETCH THE WATCH PROVIDERS ------
 async function getMovieLink(id) {
@@ -180,72 +211,6 @@ function getReleaseYear(date) {
     return yearOnly;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // ----- FUNCTION TO GET FOOD FROM FETCHED
 async function getFood() {
 
@@ -259,9 +224,9 @@ async function getFood() {
     try {
         const results = await axios.get(foodURL);
         const foodies = results.data.hits;
-
+        console.log(foodURL);
         console.log(foodies);
-        console.log(foodies.length)
+        // console.log(foodies.length)
         // make sure the search returns a valid result
         if (foodies.length > 0) {
             createFoodCard(foodies);
@@ -289,11 +254,12 @@ const createFoodCard = (foodies) => {
         const foodImage = foodie.recipe.images.THUMBNAIL.url
         const foodieImage = getFoodImage(foodie.recipe.images.REGULAR.url);
         const recipePage = foodie.recipe.shareAs;
-        
+        // const recipeSource = foodie.recipe.source;
+        const recipeLink = foodie.recipe.url;
         const ingredients = foodie.recipe.ingredientLines;
-        console.log(ingredients);
+        // console.log(ingredients);
         var ingredientsList = JSON.stringify(ingredients);
-        console.log(ingredientsList);
+        // console.log(ingredientsList);
 
         var parse = JSON.parse(ingredientsList)
         console.log(parse.length);
@@ -303,13 +269,13 @@ const createFoodCard = (foodies) => {
                 page = $('<li>')
                 .text(parse)
                 .addClass('ingredient');              
-                // ul = $('<ul>')
-                // .append(page); 
                 }
-                })
-                .append(page);    
+            })
             
+        // console.log(parse);
 
+        // for (var i = 0; i < ingredients.length; i++)    
+        // console.log(ingredients[i]);
             
 
             const foodBtn = $('<button>')
@@ -342,7 +308,7 @@ const createFoodCard = (foodies) => {
             //Creates footer with Recipe Button
             const recipeBtn = $('<button>')
                 .addClass('btn btn-primary btn-brand-color foodRecipeBtn')
-                .attr('data-movieID', "text")
+                .attr('data-recipeUrl', recipeLink)
                 .text('Recipe');
             const foodFooter = $('<div>').addClass('card-footer');
                 foodFooter.append(recipeBtn)
@@ -389,9 +355,16 @@ const createFoodCard = (foodies) => {
     })
 }
 
-// function getFoodLink() {
-//     console.log(totalLink);
-// }
+$(document).on('click', '.foodRecipeBtn', function() {
+    const recipeUrl = $(this).data('recipeurl');
+    if (recipeUrl != '') {
+        // TODO: replace with a modal
+        var newTab = window.open(recipeUrl, '_blank');
+        newTab.focus();
+    } else {
+        $('#noRecipeLinkAlert').modal('show');
+    }
+})
 
 function getFoodImage(link) {
     if (!link) {
