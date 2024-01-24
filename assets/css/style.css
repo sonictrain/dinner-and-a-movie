@@ -44,7 +44,7 @@ body {
 h1 {
     color: #ffc000;
     font-family: CorleoneDue;
-    font-size: 150px;
+    font-size: 60px;
     font-weight: 500;
     margin-bottom: 30px;
     margin-top: 20px;
@@ -110,4 +110,14 @@ footer {
 
 .popular-card img {
     height: 20rem;
+}
+
+@media (min-width: 768px) {
+    #hero-text {
+        font-size: 30px;
+    }
+
+    h1 {
+        font-size: 100px;
+    }
 }
