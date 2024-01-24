@@ -94,18 +94,6 @@ footer {
     background-color: #0d253f;
     color: white;
     font-size: 0.75rem;
-
-}
-
-.popular-card {
-    width: 18rem;
-    height: 30rem;
-}
-
-.popular-card img {
-    height: 20rem;
-}
-
     height: auto;
     text-align: center;
     margin-top: 10px;
@@ -123,3 +111,4 @@ footer {
     height: auto;
     margin: 5px;
 }
+
