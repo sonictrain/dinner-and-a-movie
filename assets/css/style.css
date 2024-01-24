@@ -112,3 +112,11 @@ footer {
     margin: 5px;
 }
 
+.popular-card {
+    width: 18rem;
+    height: 30rem;
+}
+
+.popular-card img {
+    height: 20rem;
+}
