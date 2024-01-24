@@ -16,6 +16,14 @@ $(function() {
             $('#enterMovieTitleAlert').modal('show');
         } else {
             showDropdown(false);
+            $('#movie-carousel').children('h2').eq(0).remove()
+            $('#food-carousel').children('h2').eq(0).remove()
+            $('#movie-carousel')
+                .removeClass('d-none')
+                .prepend($('<h2>').text('Movie Picks'));
+            $('#food-carousel')
+                .removeClass('d-none')
+                .prepend($('<h2>').text('Food Picks'));
             getMovies(searchTerm, options);
             getFood(searchTerm);
         }
@@ -32,8 +40,6 @@ async function getMovies(keyword, options) {
         // make sure the search returns a valid result
         if (movies.length > 0) {
             $('#popular-carousel').hide();
-            $('#movie-results').removeClass('d-none');
-            $('#food-results').removeClass('d-none');
             createCard(movies);
         } else if (movies.length === 0) {
             $('#enterMovieTitleAlert').modal('show');
@@ -505,6 +511,14 @@ function getFavourites() {
             $('#popular-carousel').hide();
             $('#movie-results').empty();
             $('#food-results').empty();
+            $('#movie-carousel').children('h2').eq(0).remove()
+            $('#food-carousel').children('h2').eq(0).remove()
+            $('#movie-carousel')
+                .removeClass('d-none')
+                .prepend($('<h2>').text('Favorite Movies'));
+            $('#food-carousel')
+                .removeClass('d-none')
+                .prepend($('<h2>').text('Favorite Foods'));
             displayFavMovies(favMoviesList);
             displayFavFoods(favFoodsList);
         }
@@ -513,8 +527,6 @@ function getFavourites() {
 
 // ---- FUNCTION TO DISPLAY MOVIES FROM LOCAL STORAGE----
 function displayFavMovies(moviesList) {
-    $('#movie-results').removeClass('d-none');
-    $('#food-results').removeClass('d-none');
     $.each(moviesList, (i, movie) => {
         const movieID = movie.thisMovieID;
         const posterPath = movie.thisMoviePosterPath;
