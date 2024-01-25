@@ -15,7 +15,6 @@ $(function() {
             $('#food-carousel')
                 .removeClass('d-none')
                 .prepend($('<h2>').text('Food Picks'));
-
             $('#movie-pairing').empty();
             $('#food-pairing').empty();
             getMovies(searchTerm, options);
@@ -86,11 +85,11 @@ const createCard = (movies) => {
             .text('Description');
         // create an html element <p> with the description text
         const description = movie.overview;
-        if (movie.overview !== '') {
-            descriptionEl = $('<p>').text(description).addClass('desc')
-        } else {
-            descriptionEl = $('<p>').text("Description not found.").addClass('desc')
-        }
+            if (movie.overview !== '') {
+                descriptionEl = $('<p>').text(description).addClass('desc')
+            } else {
+                descriptionEl = $('<p>').text("Description not found.").addClass('desc')
+            };
         // create the inner div for the collapsable button with the description
         const descInnerCard = $('<div>').addClass('card card-body').append(descriptionEl);
         // create the lower div for description and attach the inner div
@@ -170,6 +169,7 @@ async function getMovieLink(id) {
     }
 }
 
+
 // ---- Auxiliary function to get POSTER IMAGE --- 
 function getImage(path) {
     if (!path) {
@@ -221,9 +221,11 @@ async function searchTyping(keyword) {
             });
         } else {
             console.log(`Error ${res.status}`);
+            $('#errorMovieSearchAlert').modal('show');
         }
     } catch (err) {
         console.log(err);
+        $('#errorMovieSearchAlert').modal('show');
     }
 }
 
@@ -265,9 +267,11 @@ async function getPopularMovie() {
             });
         } else {
             console.log(`Error ${res.status}`);
+            $('#errorMovieSearchAlert').modal('show');
         }
     } catch (err) {
         console.log(err);
+        $('#errorMovieSearchAlert').modal('show');
     }
 };
 
@@ -294,9 +298,11 @@ async function getMovieByID(id) {
             $('#pairing-container').removeClass('d-none');
         } else {
             console.log(`Error ${res.status}`);
+            $('#errorMovieSearchAlert').modal('show');
         }
     } catch (err) {
         console.log(err);
+        $('#errorMovieSearchAlert').modal('show');
     }
 };
 
@@ -319,7 +325,7 @@ function showDropdown(bool) {
 }
 
 
-// ========================= FOOD API =========================
+// ======================== FOOD API ===================================
 
 // ----- FUNCTION TO GET FOOD FROM FETCHED
 async function getFood() {
@@ -339,6 +345,7 @@ async function getFood() {
         }
     } catch (err) {
         console.log("Error with FOOD search.", err);
+        $('#errorFoodSearchAlert').modal('show');
     }
 }
 
@@ -356,20 +363,20 @@ const createFoodCard = (foodies) => {
             .addClass('card-title');
         // cuisine type
         const typeUnformatted = foodie.recipe.cuisineType[0];
+        // ! take out as a function
         const cuisineType = typeUnformatted.toLowerCase().replace(/\b[a-z]/g, function (txtVal) {
             return txtVal.toUpperCase();
-        });
+            });
         const cuisineEl = $('<p>')
             .text("Cuisine: " + cuisineType);
         // dietary precautions
         const allergens = foodie.recipe.cautions;
-        if (allergens.length === 0) {
-            var cautions = "N/A"
-        } else {
-            cautions = allergens;
-        }
-        const foodPrecautions = $('<p>')
-            .text("Dietary Precautions: " + cautions);
+            if (allergens.length === 0) {
+                var cautions = "N/A"
+            } else {
+                cautions = allergens;
+            }
+        const foodPrecautions = $('<p>').text("Dietary Precautions: " + cautions);
         const imageUrl = foodie.recipe.images.REGULAR.url;
         const foodieImage = getFoodImage(imageUrl);
         const recipeLink = foodie.recipe.url;
@@ -381,8 +388,12 @@ const createFoodCard = (foodies) => {
                 page = $('<li>')
                     .text(parseIngredients)
                     .addClass('ingredient');
+                page = $('<li>')
+                    .text(parseIngredients)
+                    .addClass('ingredient');
             }
         })
+        // collapsable button with ingredients
         const foodBtn = $('<button>')
             .addClass('btn btn-outline-secondary btn-md mx-1 mb-2')
             .attr('type', 'button')
@@ -412,6 +423,7 @@ const createFoodCard = (foodies) => {
             .addClass('btn btn-primary btn-brand-color foodRecipeBtn')
             .attr('data-recipeUrl', recipeLink)
             .text('Recipe');
+        // star button to add to Favourites (local storage)
         const starBtn = $('<button>')
             .addClass('btn btn-outline-primary btn-sm food-favs')
             .html('<i class="fa-regular fa-star">')
@@ -433,12 +445,15 @@ const createFoodCard = (foodies) => {
         const newFoodCard = $('<div>')
             .addClass('card col-1 popular-card col-6 col-md-4 col-xl-2')
         // .css({width: '15rem',});
+            .addClass('card col-1 popular-card col-6 col-md-4 col-xl-2')
+        // .css({width: '15rem',});
         newFoodCard.append(foodieImage, foodBody, foodFooter);
         $('#food-results').append(newFoodCard);
     })
     // event listener on the star button
     addFoodToFavs();
 }
+
 
 async function getFoodByID() {
     const recipeRoot = "https://api.edamam.com/api/recipes/v2?type=public&q=";
@@ -450,8 +465,7 @@ async function getFoodByID() {
     const results = await axios.get(foodURL);
     // make sure the search returns a valid result
     if (results.status === 200) {
-        console.log(results);
-    const foodies = results.data.hits;
+        const foodies = results.data.hits;
     if (foodies.length > 0) {
         $('#food-pairing').empty();
         let ingredientListEl = $('<ul>');
@@ -467,18 +481,64 @@ async function getFoodByID() {
         $('#ingredients-list').append($(ingredientListEl));
     } else {
         $('#food-pairing').prepend(createNoFoodMatchCard());
+        $('#food-pairing').prepend(createNoFoodMatchCard());
     }
 
         } else {    
         console.log(`Error ${results.status}`);
+        $('#errorFoodSearchAlert').modal('show');
         }
 
     } catch (err) {
     console.log(err);
+    $('#errorFoodSearchAlert').modal('show');
     }
 }
 
-function createDetailCard(sectionTitle, posterLink, title, yearEl, tagLine, description, revenues, vote) {
+// ---- Event listener on STAR button in FOOD cards ------
+function addFoodToFavs() {
+    $(document).off('click', '#food-results .food-favs').on('click', '#food-results .food-favs', function (e) {
+        e.preventDefault();
+        const favFoodsList = JSON.parse(localStorage.getItem('savedFoodsList')) || [];
+        const thisFoodName = $(this).data('name');
+        const thisFoodImgUrl = $(this).data('imageurl');
+        const thisFoodCuisine = $(this).data('cuisine');
+        const thisFoodAllergens = $(this).data('allergens');
+        const thisFoodIngredients = $(this).data('ingredients');
+        const thisFoodRecipeUrl = $(this).data('recipelink');
+        const newFood = { thisFoodName, thisFoodImgUrl, thisFoodCuisine, thisFoodAllergens, thisFoodIngredients, thisFoodRecipeUrl };
+        favFoodsList.push(newFood);
+        localStorage.setItem('savedFoodsList', JSON.stringify(favFoodsList));
+        $('#addedToFavAlert').modal('show');
+    })
+}
+
+// ---- Open the recipe in a new tab -------
+$(document).on('click', '.foodRecipeBtn', function () {
+    const recipeUrl = $(this).data('recipeurl');
+    if (recipeUrl != '') {
+        // TODO: replace with a modal
+        var newTab = window.open(recipeUrl, '_blank');
+        newTab.focus();
+    } else {
+        $('#noRecipeLinkAlert').modal('show');
+    }
+})
+
+// ---- Auxiliary function to get FOOD IMAGE ---
+function getFoodImage(link) {
+    if (!link) {
+        foodImageUrl = "assets/images/movie-poster-not-found.png";
+    } else {
+        foodImageUrl = `${link}`;
+    }
+    const foodPicture = $('<img>').attr('src', foodImageUrl).addClass('card-img-top object-fit-cover');
+    return foodPicture;
+}
+
+// ===================== 2 FEATURED CARDS WITH MOVIE AND FOOD ===========================
+
+function createDetailCard(sectionTitle, posterLink, title, releaseDate, tagLine, description, revenues, vote) {
     return `<div class="card mb-3 ps-0 m-3">
                 <div class="row g-0">
                 <div class="col-lg-4 overflow-hidden p-0">
@@ -493,7 +553,7 @@ function createDetailCard(sectionTitle, posterLink, title, yearEl, tagLine, desc
                             </div>
                             <p class="card-text mb-5">
                                 <small class="text-body-secondary">
-                                    Release Date: ${yearEl}
+                                    Release Date: ${releaseDate}
                                 </small>
                             </p>
                             <h5 class="card-title mb-2">${tagLine}
@@ -547,60 +607,18 @@ function createFoodDetailCard(imageLink, foodHeader, calCount, ingredients, cuis
 }
 
 function createNoFoodMatchCard() {
-return `<div class="card mb-3 ps-0 m-3">
-            <div class="row g-0">
-                <div class="col-lg-4 overflow-hidden p-0">
-                <img src="./assets/images/food-image-not-found.png" class="h-100 w-100 object-fit-cover rounded-start" alt="“Titanic” Chicken details">
-            </div>
-            <div class="col-lg-8">
-                <div class="card-body h-100 d-flex flex-column">
-                <h3 class="card-title">No food match</h3>
-                <div>
-            </div> 
-        </div>`
-}
-
-
-// ---- Event listener on STAR button in FOOD cards ------
-function addFoodToFavs() {
-    $(document).off('click', '#food-results .food-favs').on('click', '#food-results .food-favs', function (e) {
-        e.preventDefault();
-        const favFoodsList = JSON.parse(localStorage.getItem('savedFoodsList')) || [];
-        const thisFoodName = $(this).data('name');
-        const thisFoodImgUrl = $(this).data('imageurl');
-        const thisFoodCuisine = $(this).data('cuisine');
-        const thisFoodAllergens = $(this).data('allergens');
-        const thisFoodIngredients = $(this).data('ingredients');
-        const thisFoodRecipeUrl = $(this).data('recipelink');
-        const newFood = { thisFoodName, thisFoodImgUrl, thisFoodCuisine, thisFoodAllergens, thisFoodIngredients, thisFoodRecipeUrl };
-        favFoodsList.push(newFood);
-        localStorage.setItem('savedFoodsList', JSON.stringify(favFoodsList));
-        $('#addedToFavAlert').modal('show');
-    })
-}
-
-// ---- Open the recipe in a new tab -------
-$(document).on('click', '.foodRecipeBtn', function () {
-    const recipeUrl = $(this).data('recipeurl');
-    if (recipeUrl != '') {
-        // TODO: replace with a modal
-        var newTab = window.open(recipeUrl, '_blank');
-        newTab.focus();
-    } else {
-        $('#noRecipeLinkAlert').modal('show');
+    return `<div class="card mb-3 ps-0 m-3">
+                <div class="row g-0">
+                    <div class="col-lg-4 overflow-hidden p-0">
+                    <img src="./assets/images/food-image-not-found.png" class="h-100 w-100 object-fit-cover rounded-start" alt="“Titanic” Chicken details">
+                </div>
+                <div class="col-lg-8">
+                    <div class="card-body h-100 d-flex flex-column">
+                    <h3 class="card-title">No food match</h3>
+                    <div>
+                </div> 
+            </div>`
     }
-})
-
-// ---- Auxiliary function to get FOOD IMAGE ---
-function getFoodImage(link) {
-    if (!link) {
-        foodImageUrl = "assets/images/movie-poster-not-found.png";
-    } else {
-        foodImageUrl = `${link}`;
-    }
-    const foodPicture = $('<img>').attr('src', foodImageUrl).addClass('card-img-top object-fit-cover');
-    return foodPicture;
-}
 
 // ======================= LOCAL STORAGE =========================
 
