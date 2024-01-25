@@ -5,7 +5,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+        integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
     <!-- Bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous" />
@@ -18,14 +20,16 @@
         <div class="jumbotron py-5 px-3">
             <div class="jumbotron-container  text-center">
                 <p id="hero-text">Plan your perfect evening with...</p>
-                <h1 class="display-8">Dinner and a Movie</h1>
+                <h1>Dinner and a Movie</h1>
                 <!-- select form for dinner and movie choice -->
                 <div class="row justify-content-center d-flex">
                     <!-- input group for MOVIE & FOOD Search  -->
-                    <div class="col-md-10 col-lg-8 col-xl-7">
-                        <div class="d-flex">
+                    <div class="col-sm-12 col-md-10">
+                        <div class="d-flex flex-column flex-md-row gap-3">
                             <div class="input-group">
-                                <input type="text" class="form-control" id="movie-keyword" aria-label="Text input with segmented dropdown button" placeholder="Input a Movie or a TV Series">
+                                <input type="text" class="form-control" id="movie-keyword"
+                                    aria-label="Text input with segmented dropdown button"
+                                    placeholder="Input a Movie Title">
                                 <button class="btn btn-primary" type="button" id="movie-search">Search</button>
                                 <button type="button" class="btn btn-primary dropdown-toggle dropdown-toggle-split"
                                     data-bs-toggle="dropdown" aria-expanded="false" id="suggested-dropdown">
@@ -34,10 +38,11 @@
                                 <ul class="dropdown-menu w-100 dropdown-menu-end" id="suggested-list">
                                 </ul>
                             </div>
+                            <div class="col-sm col-md-3 col-lg-3 col-xl-2">
+                                <button class="btn btn-primary btn-brand-color w-100" id="my-favourites"><i
+                                        class="fa-regular fa-star"></i> My Favourites</button>
+                            </div>
                         </div>
-                    </div>
-                    <div class="col-md-2 col-xl-2">
-                        <button class="btn btn-primary btn-brand-color" id="my-favourites"><i class="fa-regular fa-star"></i> My Favourites</button>
                     </div>
                 </div>
             </div>
@@ -45,20 +50,27 @@
     </header>
     <!-- section to display returned data -->
     <main>
-        <section class="row returned-data justify-content-around">
-            <!-- container to show popular movies at the start -->
-            <section class="row p-3" id="popular-carousel">
-                <h2>Popular Movies</h2>
-                <div class="d-flex gap-3 overflow-x-scroll p-3" id="popular-movies" class="row"></div>
+        <section class="returned-data justify-content-around">
+            <!-- container to hold movie/food pairing -->
+
+            <section id="pairing-container" class="d-flex flex-sm-column flex-md-row p-3">
+                <div id="movie-pairing" class="col-sm-12 col-md-6"></div>
+                <div id="food-pairing" class="col-sm-12 col-md-6"></div>
             </section>
+
             <!-- container to hold move/tv show suggestion -->
-            <div class="col-6">
-                <section id="movie-results" class="row"></section>
-            </div>
+            <section id="movie-carousel" class="p-3 d-none">
+                <div class="d-flex gap-3 overflow-x-scroll p-3" id="movie-results"></div>
+            </section>
             <!-- container to hold dinner suggestion -->
-            <div class="col-6">
-                <section id="food-results" class="row"></section>
-            </div>
+            <section id="food-carousel" class="p-3 d-none">
+                <div class="d-flex gap-3 overflow-x-scroll p-3" id="food-results"></div>
+            </section>
+            <!-- container to show popular movies at the start -->
+            <section id="popular-carousel" class="p-3">
+                <h2>Popular Movies</h2>
+                <div class="d-flex gap-3 overflow-x-scroll p-3" id="popular-movies"></div>
+            </section>
         </section>
 
         <!-- MODALS -->
@@ -116,8 +128,8 @@
             </div>
         </div>
 
-         <!-- #4 Added to Favourites -->
-         <div class="modal fade" tabindex="-1" role="dialog" id="addedToFavAlert">
+        <!-- #4 Added to Favourites -->
+        <div class="modal fade" tabindex="-1" role="dialog" id="addedToFavAlert">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -162,7 +174,8 @@
                     <a href="https://developer.themoviedb.org/docs/getting-started" target="_blank">
                         <img src="assets/images/tmdb-logo.png" alt="TMDB logo" id="tmdb-logo">
                     </a>
-                    <p class="align-middle mb-0">This product uses the TMDB API but is not endorsed or certified by TMDB.</p>
+                    <p class="align-middle mb-0">This product uses the TMDB API but is not endorsed or certified by
+                        TMDB.</p>
                 </div>
             </div>
         </div>
@@ -172,7 +185,8 @@
                     <a href="https://www.edamam.com/" target="_blank">
                         <img src="./assets/images/Edamam_badge.png" alt="Edamam logo" id="edamam-logo">
                     </a>
-                    <p class="align-middle mb-0">This product uses the Edamam API but is not endorsed or certified by Edamam.</p>
+                    <p class="align-middle mb-0">This product uses the Edamam API but is not endorsed or certified by
+                        Edamam.</p>
                 </div>
             </div>
         </div>
