@@ -456,6 +456,7 @@ function formatCuisine(str) {
 
 
 async function getFoodByID() {
+    $('#movie-results').empty();
     const recipeRoot = "https://api.edamam.com/api/recipes/v2?type=public&q=";
     const APIid = "10153ee1";
     const APIKey = "027bd5bbabe6fabd88736c41b30ffe19";
@@ -479,6 +480,7 @@ async function getFoodByID() {
             .append($('<a>').addClass('col btn btn-primary').attr('href', foodies[1].recipe.url).text('Recipe Website'));
         $('#ingredients-list').append($(ingredientListEl));
     } else {
+        $('#food-pairing').empty();
         $('#food-pairing').prepend(createNoFoodMatchCard());
     }
 
