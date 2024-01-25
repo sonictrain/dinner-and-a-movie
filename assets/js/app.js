@@ -24,9 +24,11 @@ $(function() {
             $('#food-carousel')
                 .removeClass('d-none')
                 .prepend($('<h2>').text('Food Picks'));
+
+            $('#movie-pairing').empty();
+            $('#food-pairing').empty();
             getMovies(searchTerm, options);
             getFood(searchTerm);
-            getFoodByID(searchTerm);
         }
     })
     getFavourites();
@@ -163,6 +165,10 @@ async function searchTyping(keyword) {
                 // create list item
                 const listItem = $('<li>').addClass('dropdown-item d-flex gap-2').attr('movie-id', o.id).attr('id', 'search-by-id').on('click', () => {
                     getMovieByID(o.id);
+                    getFoodByID(o.title);
+                    showDropdown(false);
+                    $('#food-carousel').addClass('d-none');
+                    $('#movie-carousel').addClass('d-none');
                 });
                 // add movie title
                 listItem.append($('<p>').addClass('mb-0 me-auto').text(o.title));
@@ -209,7 +215,8 @@ async function getPopularMovie() {
                                         .text('Read More')
                                         .attr('role', 'button')
                                         .on('click', () => {
-                                            getMovieByID(o.id)
+                                            getMovieByID(o.id);
+                                            getFoodByID(o.title);
                                         })
                                 )
                         )
@@ -236,8 +243,11 @@ async function getMovieByID(id) {
         const res = await fetch(`https://api.themoviedb.org/3/movie/${id}?language=en-US`, options);
         if (res.status === 200) {
             data = await res.json();
+            $('#movie-pairing').empty();
             $('#movie-pairing').append(createDetailCard("Movie Details", `https://image.tmdb.org/t/p/w500/${data.poster_path}`, data.title, data.release_date, data.tagline, data.overview, USDollar.format(data.revenue), data.vote_average, data.homepage, `https://www.imdb.com/title/${data.imdb_id}/`));
+            
             $(data.genres).each((i, g) => $('#categories-container').append($('<span>').addClass('badge rounded-pill text-bg-warning').text(g.name)));
+            
             $('#buttons').append($('<a>').addClass('col btn btn-primary').attr('href', data.homepage).text('Official Website'))
                 .append($('<a>').addClass('col btn btn-primary').attr('href', `https://www.imdb.com/title/${data.imdb_id}/`).text('IMDB Website'));
             $('#pairing-container').removeClass('d-none');
@@ -432,37 +442,83 @@ async function getFoodByID() {
     const searchTerm = $('#movie-keyword').val();
     const foodURL = recipeRoot + searchTerm + "&app_id=" + APIid + "&app_key=" + APIKey;
 
-
     try {
     const results = await axios.get(foodURL);
 
     // make sure the search returns a valid result
     if (results.status === 200) {
+        console.log(results);
     const foodies = results.data.hits;
 
-    $('#food-pairing').empty();
+    if (foodies.length > 0) {
+        $('#food-pairing').empty();
+    
+        let ingredientListEl = $('<ul>');
+        $(foodies[0].recipe.ingredientLines).each((i,x) => {
+           $(ingredientListEl).append($('<li>').text(x))
+        })
+    
+        $('#food-pairing').prepend(createFoodDetailCard(foodies[0].recipe.images.REGULAR.url, foodies[0].recipe.label, parseInt(foodies[0].recipe.calories), $(ingredientListEl), foodies[0].recipe.cuisineType, foodies[0].recipe.cautions));
+        $(foodies[0].recipe.cautions).each((i,m) => $('#tagList').prepend($('<span>').addClass('badge rounded-pill text-bg-warning').text(m.name)));
+        $('#foodButtons').append($('<a>').addClass('col btn btn-primary').attr('href', foodies[1].recipe.uri).text('Official Edamam Recipe'))
+        .append($('<a>').addClass('col btn btn-primary').attr('href', foodies[1].recipe.url).text('Recipe Website'));
+    
+        $('#ingredients-list').append($(ingredientListEl));
+    } else {
+        $('#food-pairing').prepend(createNoFoodMatchCard());
+    }
 
-    $('#food-pairing').prepend(createFoodDetailCard("Food Details", foodies[1].recipe.images.REGULAR.url, foodies[1].recipe.label, parseInt(foodies[1].recipe.calories), foodies[1].recipe.cuisineType, foodies[1].recipe.cautions));
-    $(foodies[1].recipe.cautions).each((i,m) => $('#tagList').prepend($('<span>').addClass('badge rounded-pill text-bg-warning').text(m.name)));
-    $('#foodButtons').append($('<a>').addClass('col btn btn-primary').attr('href', foodies[1].recipe.uri).text('Official Edamam Recipe'))
-    .append($('<a>').addClass('col btn btn-primary').attr('href', foodies[1].recipe.url).text('Recipe Website'));
         } else {
         console.log(`Error ${results.status}`);
         }
+
     } catch (err) {
     console.log(err);
     }
 }
 
-function createFoodDetailCard(suggestedFood, imageLink, foodHeader, calCount, cuisine, precautions) {
-    return `<h2 class="ms-2 mt-3">${suggestedFood}</h2>
-            <div class="card mt-3 mb-3 m-3 p-2 h-50">
+function createDetailCard(sectionTitle, posterLink, title, releaseDate, tagLine, description, revenues, vote) {
+    return `<div class="card mb-3 ps-0 m-3">
                 <div class="row g-0">
-                    <div class="col-md-4">
-                    <img src="${imageLink}" 
-                        class="img-fluid rounded-start" alt="">
+                <div class="col-lg-4 overflow-hidden p-0">
+                        <img src="${posterLink}"
+                            class="h-100 w-100 object-fit-cover rounded-start" alt="${title} details">
+                    </div>
+                    <div class="col-lg-8">
+                        <div class="card-body h-100 d-flex flex-column">
+                            <h3 class="card-title">${title}</h3>
+                            <div class="d-flex flex-row gap-2" id="categories-container"></div>
+                            <div>
+                            </div>
+                            <p class="card-text mb-5">
+                                <small class="text-body-secondary">
+                                    Release Date: ${releaseDate}
+                                </small>
+                            </p>
+                            <h5 class="card-title mb-2">${tagLine}
+                            </h5>
+                            <p class="card-text">${description}
+                            </p>
+                            <div>
+                                <p>Revenues <span class="badge rounded-pill text-bg-dark">${revenues}</span></p>
+                                <p>Vote <span class="badge rounded-pill text-bg-dark">${vote}/10</span></p>
+                            </div>
+                            <div class="d-flex flex-row gap-2 w-100 mt-auto" id="buttons">
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="col-md-8">
+            </div>`
+}
+
+function createFoodDetailCard(imageLink, foodHeader, calCount, ingredients, cuisine, precautions) {
+    return `<div class="card mb-3 ps-0 m-3">
+                <div class="row g-0">
+                    <div class="col-lg-4 overflow-hidden p-0">
+                    <img src="${imageLink}" 
+                        class="h-100 w-100 object-fit-cover rounded-start" alt="${foodHeader} details">
+                </div>
+                <div class="col-lg-8">
                     <div class="card-body h-100 d-flex flex-column">
                         <h3 class="card-title">${foodHeader}</h3>
                         <div class="d-flex flex-row gap-2" id="categories-container"></div>
@@ -473,8 +529,8 @@ function createFoodDetailCard(suggestedFood, imageLink, foodHeader, calCount, cu
                                 Calories: ${calCount}
                             </small>
                         </p>
-                        <h5 class="card-title mb-2">Ingredients
-                        </h5>
+                        <h5 class="card-title mb-2">Ingredients</h5>
+                        <div id="ingredients-list"></div>
                         <p class="card-text">
                         </p>
                         <div>
@@ -487,6 +543,20 @@ function createFoodDetailCard(suggestedFood, imageLink, foodHeader, calCount, cu
                 </div>
             </div>
         </div>`
+    }
+
+    function createNoFoodMatchCard() {
+    return `<div class="card mb-3 ps-0 m-3">
+                <div class="row g-0">
+                    <div class="col-lg-4 overflow-hidden p-0">
+                    <img src="./assets/images/food-image-not-found.png" class="h-100 w-100 object-fit-cover rounded-start" alt="“Titanic” Chicken details">
+                </div>
+                <div class="col-lg-8">
+                    <div class="card-body h-100 d-flex flex-column">
+                    <h3 class="card-title">No food match</h3>
+                    <div>
+                </div> 
+            </div>`
     }
 
 
@@ -529,41 +599,6 @@ function getFoodImage(link) {
     }
     const foodPicture = $('<img>').attr('src', foodImageUrl).addClass('card-img-top object-fit-cover');
     return foodPicture;
-}
-
-function createDetailCard(sectionTitle, posterLink, title, releaseDate, tagLine, description, revenues, vote) {
-    return `<h2>${sectionTitle}</h2>
-            <div class="card mb-3 ps-0 h-50 m-3">
-                <div class="row g-0">
-                    <div class="col-md-4">
-                        <img src="${posterLink}"
-                            class="img-fluid rounded-start" alt="">
-                    </div>
-                    <div class="col-md-8">
-                        <div class="card-body h-100 d-flex flex-column">
-                            <h3 class="card-title">${title}</h3>
-                            <div class="d-flex flex-row gap-2" id="categories-container"></div>
-                            <div>
-                            </div>
-                            <p class="card-text mb-5">
-                                <small class="text-body-secondary">
-                                    Release Date: ${releaseDate}
-                                </small>
-                            </p>
-                            <h5 class="card-title mb-2">${tagLine}
-                            </h5>
-                            <p class="card-text">${description}
-                            </p>
-                            <div>
-                                <p>Revenues <span class="badge rounded-pill text-bg-dark">${revenues}</span></p>
-                                <p>Vote <span class="badge rounded-pill text-bg-dark">${vote}/10</span></p>
-                            </div>
-                            <div class="d-flex flex-row gap-2 w-100 mt-auto" id="buttons">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>`
 }
 
 // ---- EVENT LISTENER ON THE 'MY FAVOURITES' BUTTON ----
