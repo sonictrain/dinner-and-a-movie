@@ -118,7 +118,7 @@ const createCard = (movies) => {
         $('[data-bs-toggle="tooltip"]').tooltip();
         const cardFooter = $('<div>').addClass('card-footer d-flex justify-content-between');
         cardFooter.append(watchBtn, starBtn);
-        const newCard = $('<div>').addClass('card col-1 popular-card col-6 col-md-4 col-xl-2');
+        const newCard = $('<div>').addClass('card col-12 col-md-6 col-lg-3 col-xl-2');
         newCard.append(poster, cardBody, cardFooter);
         $('#movie-results').append(newCard);
         // add event listener on the star button
@@ -168,7 +168,6 @@ async function getMovieLink(id) {
         $('#notAvailableUKAlert').modal('show');
     }
 }
-
 
 // ---- Auxiliary function to get POSTER IMAGE --- 
 function getImage(path) {
@@ -237,7 +236,7 @@ async function getPopularMovie() {
             data = await res.json();
             $(data.results).each((i, o) => {
                 $('#popular-movies').append(
-                    $('<div>').addClass('card col-1 popular-card col-6 col-md-4 col-xl-2')
+                    $('<div>').addClass('card col-1  col-6 col-md-4 col-xl-2')
                         .append(
                             $('<img>')
                                 .attr('src', `https://image.tmdb.org/t/p/w500/${o.poster_path}`)
@@ -363,10 +362,7 @@ const createFoodCard = (foodies) => {
             .addClass('card-title');
         // cuisine type
         const typeUnformatted = foodie.recipe.cuisineType[0];
-        // ! take out as a function
-        const cuisineType = typeUnformatted.toLowerCase().replace(/\b[a-z]/g, function (txtVal) {
-            return txtVal.toUpperCase();
-            });
+        const cuisineType = formatCuisine(typeUnformatted);
         const cuisineEl = $('<p>')
             .text("Cuisine: " + cuisineType);
         // dietary precautions
@@ -442,16 +438,20 @@ const createFoodCard = (foodies) => {
         const foodFooter = $('<div>').addClass('card-footer d-flex justify-content-between');
         foodFooter.append(recipeBtn, starBtn)
         // combines IMAGE, NAME, BODY, & FOOTER
-        const newFoodCard = $('<div>')
-            .addClass('card col-1 popular-card col-6 col-md-4 col-xl-2')
-        // .css({width: '15rem',});
-            .addClass('card col-1 popular-card col-6 col-md-4 col-xl-2')
-        // .css({width: '15rem',});
+        const newFoodCard = $('<div>').addClass('card col-12 col-md-6 col-lg-3 col-xl-2');
         newFoodCard.append(foodieImage, foodBody, foodFooter);
         $('#food-results').append(newFoodCard);
     })
     // event listener on the star button
     addFoodToFavs();
+}
+
+// return cuisine type in Proper Case
+function formatCuisine(str) {
+    const newStr = str.toLowerCase().replace(/\b[a-z]/g, function (txtVal) {
+        return txtVal.toUpperCase();
+    });
+    return newStr;
 }
 
 
@@ -477,10 +477,8 @@ async function getFoodByID() {
         $('#foodButtons')
             .append($('<a>').addClass('col btn btn-primary').attr('href', foodies[1].recipe.uri).text('Official Edamam Recipe'))
             .append($('<a>').addClass('col btn btn-primary').attr('href', foodies[1].recipe.url).text('Recipe Website'));
-    
         $('#ingredients-list').append($(ingredientListEl));
     } else {
-        $('#food-pairing').prepend(createNoFoodMatchCard());
         $('#food-pairing').prepend(createNoFoodMatchCard());
     }
 
@@ -583,8 +581,6 @@ function createFoodDetailCard(imageLink, foodHeader, calCount, ingredients, cuis
                     <div class="card-body h-100 d-flex flex-column">
                         <h3 class="card-title">${foodHeader}</h3>
                         <div class="d-flex flex-row gap-2" id="categories-container"></div>
-                        <div>
-                        </div>
                         <p class="card-text mb-5">
                             <small class="text-body-secondary">
                                 Calories: ${calCount}
@@ -633,6 +629,8 @@ function getFavourites() {
             $('#noSavedFavAlert').modal('show');
         } else {
             $('#popular-carousel').hide();
+            $('#movie-pairing').hide();
+            $('#food-pairing').hide();
             $('#movie-results').empty();
             $('#food-results').empty();
             $('#movie-carousel').children('h2').eq(0).remove()
@@ -691,7 +689,7 @@ function displayFavMovies(moviesList) {
             .text('Viewing Options');
         const cardFooter = $('<div>').addClass('card-footer d-flex justify-content-between');
         cardFooter.append(watchBtn);
-        const newCard = $('<div>').addClass('card col-1 popular-card col-6 col-md-4 col-xl-2');
+        const newCard = $('<div>').addClass('card col-12 col-md-6 col-lg-3 col-xl-2');
         newCard.append(poster, cardBody, cardFooter);
         $('#movie-results').append(newCard);
     })
@@ -753,8 +751,7 @@ function displayFavFoods(foodList) {
         const foodFooter = $('<div>').addClass('card-footer d-flex justify-content-between');
         foodFooter.append(recipeBtn)
         // combine IMAGE, NAME, BODY, & FOOTER
-        const newFoodCard = $('<div>')
-            .addClass('card col-1 popular-card col-6 col-md-4 col-xl-2');
+        const newFoodCard = $('<div>').addClass('card col-12 col-md-6 col-lg-3 col-xl-2');
         newFoodCard.append(foodieImage, foodBody, foodFooter);
         $('#food-results').append(newFoodCard);
     })

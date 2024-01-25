@@ -13,10 +13,6 @@
     src: url("../Fonts/CorleoneDue.ttf");
 }
 
-main {
-    flex: 1;
-}
-
 html, body {
     height: 100%;
 }
@@ -27,18 +23,8 @@ body {
     flex-direction: column;
 }
 
-/* header */
-.jumbotron {
-    text-align: center;
-    background-image: url("../images/dinner&movie-hero.png");
-    background-size: cover;
-    background-repeat: no-repeat;
-    color: black;
-    border-radius: 0;
-    height: 450px;
-    padding: 80px;
-    width: 100%;
-    object-fit: contain;
+main {
+    flex: 1;
 }
 
 h1 {
@@ -55,6 +41,19 @@ h2 {
     color: white;
 }
 
+.jumbotron {
+    text-align: center;
+    background-image: url("../images/dinner&movie-hero.png");
+    background-size: cover;
+    background-repeat: no-repeat;
+    color: black;
+    border-radius: 0;
+    height: 450px;
+    padding: 80px;
+    width: 100%;
+    object-fit: contain;
+}
+
 #hero-text {
     color: #fadd87;
     font-family: Pacifico-Regular;
@@ -68,20 +67,10 @@ h2 {
     padding: 5px;
 }
 
- 
 .btn-brand-color {
     background-color: #ffc000;
     border: none;
     color: black;
-}
-
-.popular-card img {
-    height: 24rem;
-}
-
-/* body */
-body {
-    background-color: #610304;
 }
 
 #tmdb-logo {
