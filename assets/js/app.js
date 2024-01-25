@@ -26,6 +26,7 @@ $(function() {
                 .prepend($('<h2>').text('Food Picks'));
             getMovies(searchTerm, options);
             getFood(searchTerm);
+            getFoodByID(searchTerm);
         }
     })
     getFavourites();
@@ -422,6 +423,72 @@ const createFoodCard = (foodies) => {
     })
     addFoodToFavs();
 }
+
+async function getFoodByID() {
+
+    const recipeRoot = "https://api.edamam.com/api/recipes/v2?type=public&q=";
+    const APIid = "10153ee1";
+    const APIKey = "027bd5bbabe6fabd88736c41b30ffe19";
+    const searchTerm = $('#movie-keyword').val();
+    const foodURL = recipeRoot + searchTerm + "&app_id=" + APIid + "&app_key=" + APIKey;
+
+
+    try {
+    const results = await axios.get(foodURL);
+
+    // make sure the search returns a valid result
+    if (results.status === 200) {
+    const foodies = results.data.hits;
+
+    $('#food-pairing').empty();
+
+    $('#food-pairing').prepend(createFoodDetailCard("Food Details", foodies[1].recipe.images.REGULAR.url, foodies[1].recipe.label, parseInt(foodies[1].recipe.calories), foodies[1].recipe.cuisineType, foodies[1].recipe.cautions));
+    $(foodies[1].recipe.cautions).each((i,m) => $('#tagList').prepend($('<span>').addClass('badge rounded-pill text-bg-warning').text(m.name)));
+    $('#foodButtons').append($('<a>').addClass('col btn btn-primary').attr('href', foodies[1].recipe.uri).text('Official Edamam Recipe'))
+    .append($('<a>').addClass('col btn btn-primary').attr('href', foodies[1].recipe.url).text('Recipe Website'));
+        } else {
+        console.log(`Error ${results.status}`);
+        }
+    } catch (err) {
+    console.log(err);
+    }
+}
+
+function createFoodDetailCard(suggestedFood, imageLink, foodHeader, calCount, cuisine, precautions) {
+    return `<h2 class="ms-2 mt-3">${suggestedFood}</h2>
+            <div class="card mt-3 mb-3 m-3 p-2 h-50">
+                <div class="row g-0">
+                    <div class="col-md-4">
+                    <img src="${imageLink}" 
+                        class="img-fluid rounded-start" alt="">
+                </div>
+                <div class="col-md-8">
+                    <div class="card-body h-100 d-flex flex-column">
+                        <h3 class="card-title">${foodHeader}</h3>
+                        <div class="d-flex flex-row gap-2" id="categories-container"></div>
+                        <div>
+                        </div>
+                        <p class="card-text mb-5">
+                            <small class="text-body-secondary">
+                                Calories: ${calCount}
+                            </small>
+                        </p>
+                        <h5 class="card-title mb-2">Ingredients
+                        </h5>
+                        <p class="card-text">
+                        </p>
+                        <div>
+                            <p>Cuisine Type <span class="badge rounded-pill bg-warning text-dark">${cuisine}</span></p>
+                            <p>Dietary Precautions <span class="badge rounded-pill text-bg-dark">${precautions}</span></p>
+                        </div>
+                        <div class="d-flex flex-row gap-2 w-100 mt-auto" id="foodButtons">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>`
+    }
+
 
 // ---- Event listener on STAR button in FOOD cards ------
 function addFoodToFavs() {
