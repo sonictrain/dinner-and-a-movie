@@ -44,7 +44,7 @@ body {
 h1 {
     color: #ffc000;
     font-family: CorleoneDue;
-    font-size: 150px;
+    font-size: 60px;
     font-weight: 500;
     margin-bottom: 30px;
     margin-top: 20px;
@@ -58,7 +58,7 @@ h2 {
 #hero-text {
     color: #fadd87;
     font-family: Pacifico-Regular;
-    font-size: 40px;
+    font-size: 25px;
     margin-top: 20px;
     text-shadow: -2px -2px 0 #000, 2px -2px 0 #000, -2px 2px 0 #000, 2px 2px 0 #000;
 }
@@ -68,16 +68,15 @@ h2 {
     padding: 5px;
 }
 
-/*Ask if remove */
-#movie-search { 
-}
-  
 .btn-brand-color {
     background-color: #ffc000;
     border: none;
     color: black;
 }
 
+.popular-card img {
+    height: 24rem;
+}
 
 /* body */
 body {
@@ -112,11 +111,13 @@ footer {
     margin: 5px;
 }
 
-.popular-card {
-    width: 18rem;
-    height: 30rem;
-}
+/* media-queries */
+@media (min-width: 768px) {
+    #hero-text {
+        font-size: 30px;
+    }
 
-.popular-card img {
-    height: 20rem;
+    h1 {
+        font-size: 100px;
+    }
 }
