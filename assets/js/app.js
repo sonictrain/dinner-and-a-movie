@@ -169,7 +169,6 @@ async function getMovieLink(id) {
     }
 }
 
-
 // ---- Auxiliary function to get POSTER IMAGE --- 
 function getImage(path) {
     if (!path) {
@@ -363,10 +362,7 @@ const createFoodCard = (foodies) => {
             .addClass('card-title');
         // cuisine type
         const typeUnformatted = foodie.recipe.cuisineType[0];
-        // ! take out as a function
-        const cuisineType = typeUnformatted.toLowerCase().replace(/\b[a-z]/g, function (txtVal) {
-            return txtVal.toUpperCase();
-            });
+        const cuisineType = formatCuisine(typeUnformatted);
         const cuisineEl = $('<p>')
             .text("Cuisine: " + cuisineType);
         // dietary precautions
@@ -454,6 +450,14 @@ const createFoodCard = (foodies) => {
     addFoodToFavs();
 }
 
+// return cuisine type in Proper Case
+function formatCuisine(str) {
+    const newStr = str.toLowerCase().replace(/\b[a-z]/g, function (txtVal) {
+        return txtVal.toUpperCase();
+    });
+    return newStr;
+}
+
 
 async function getFoodByID() {
     const recipeRoot = "https://api.edamam.com/api/recipes/v2?type=public&q=";
@@ -477,10 +481,8 @@ async function getFoodByID() {
         $('#foodButtons')
             .append($('<a>').addClass('col btn btn-primary').attr('href', foodies[1].recipe.uri).text('Official Edamam Recipe'))
             .append($('<a>').addClass('col btn btn-primary').attr('href', foodies[1].recipe.url).text('Recipe Website'));
-    
         $('#ingredients-list').append($(ingredientListEl));
     } else {
-        $('#food-pairing').prepend(createNoFoodMatchCard());
         $('#food-pairing').prepend(createNoFoodMatchCard());
     }
 
@@ -633,6 +635,8 @@ function getFavourites() {
             $('#noSavedFavAlert').modal('show');
         } else {
             $('#popular-carousel').hide();
+            $('#movie-pairing').hide();
+            $('#food-pairing').hide();
             $('#movie-results').empty();
             $('#food-results').empty();
             $('#movie-carousel').children('h2').eq(0).remove()
