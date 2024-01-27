@@ -172,7 +172,7 @@ async function getMovieLink(id) {
 // ---- Auxiliary function to get POSTER IMAGE --- 
 function getImage(path) {
     if (!path) {
-        imageUrl = "assets/images/movie-poster-not-found.png";
+        imageUrl = "./assets/images/movie-poster-not-found.png";
     } else {
         imageUrl = `https://image.tmdb.org/t/p/w154${path}`;
     }
@@ -528,7 +528,7 @@ $(document).on('click', '.foodRecipeBtn', function () {
 // ---- Auxiliary function to get FOOD IMAGE ---
 function getFoodImage(link) {
     if (!link) {
-        foodImageUrl = "assets/images/movie-poster-not-found.png";
+        foodImageUrl = "./assets/images/food-image-not-found.png";
     } else {
         foodImageUrl = `${link}`;
     }

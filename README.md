@@ -69,11 +69,11 @@ The deployed project looks like this:
 
 ### Links
 
-The deployed application and the corresponding code can be reached via the following links:
+You can view the deployed application, the code repository, and the project presentation via the following links:
 
-Deployed website: (https://sonictrain.github.io/dinner-and-a-movie/)
-
-Code repository: (https://github.com/sonictrain/dinner-and-a-movie)
+- [Deployed website][deployed-url]
+- [Code repository][repo-url]
+- [Project presentation][presentatation-url]
 
 <!-- Button images and links -->
 
@@ -97,3 +97,6 @@ Code repository: (https://github.com/sonictrain/dinner-and-a-movie)
 [edamam-badge]: https://img.shields.io/badge/Edamam_API-%23005a00?style=for-the-badge
 [edamam-url]: https://www.edamam.com/
 [project-gif]: ./assets/images/project.gif
+[presentatation-url]: https://docs.google.com/presentation/d/1kgHbwXWUnIS0n7yGO47dDS_6MMGWnZK8i4zppEwCCu8/edit?usp=sharing
+[deployed-url]: https://sonictrain.github.io/dinner-and-a-movie/
+[repo-url]: https://github.com/sonictrain/dinner-and-a-movie
