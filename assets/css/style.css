@@ -41,6 +41,10 @@ h2 {
     color: white;
 }
 
+.striped-item:nth-child(odd) {
+    background-color: rgb(245, 245, 245);
+}
+
 .jumbotron {
     text-align: center;
     background-image: url("../images/dinner&movie-hero.png");
