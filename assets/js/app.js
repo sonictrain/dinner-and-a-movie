@@ -203,7 +203,7 @@ async function searchTyping(keyword) {
             // and append each element of the array
             $(sortedArray).each((i, o) => {
                 // create list item
-                const listItem = $('<li>').addClass('dropdown-item d-flex gap-2').attr('movie-id', o.id).attr('id', 'search-by-id').on('click', () => {
+                const listItem = $('<li>').addClass('dropdown-item d-flex gap-2 striped-item py-2').attr('movie-id', o.id).attr('id', 'search-by-id').on('click', () => {
                     getMovieByID(o.id);
                     getFoodByID(o.title);
                     showDropdown(false);
@@ -211,11 +211,12 @@ async function searchTyping(keyword) {
                     $('#movie-carousel').addClass('d-none');
                 });
                 // add movie title
-                listItem.append($('<p>').addClass('mb-0 me-auto').text(o.title));
-                // add release date in a pill badge
-                listItem.append($('<span>').addClass('badge rounded-pill text-bg-info').text(`Year ${dayjs(o.release_date).format('YYYY')}`));
-                // add popularity score in a pill badge
-                listItem.append($('<span>').addClass('badge rounded-pill text-bg-warning').text(`Popularity ${o.popularity.toFixed()}`));
+                listItem.append($('<div>').addClass('col').append($('<p>').addClass('mb-0 me-auto text-wrap pe-3 mb-2').text(o.title)));
+                listItem.append($('<div>').addClass('w-auto d-flex flex-column justify-content-center')
+                            // add release date in a pill badge
+                            .append($('<span>').addClass('badge text-bg-info ms-auto pill-text rounded-bottom-0 w-100').text(`Year ${dayjs(o.release_date).format('YYYY')}`))
+                            // add popularity score in a pill badge
+                            .append($('<span>').addClass('badge text-bg-warning pill-text rounded-top-0 w-100').text(`Popularity ${o.popularity.toFixed()}`)));
                 $('#suggested-list').append(listItem);
             });
         } else {
